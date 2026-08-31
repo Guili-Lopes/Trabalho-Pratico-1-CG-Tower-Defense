@@ -126,10 +126,10 @@ O jogo utiliza dois valores separados:
 - [ ] Loop de reinício do jogo.
 - [ ] Uso de texturas.
 
-## Criador(es)
+## Criadores
 
 - **Nome:** Guilherme Lourenço Lopes e David Lanza Melo Matos
-- **GitHub:** [preencher]
+- **GitHub:** [Guili-Lopes](https://github.com/Guili-Lopes) e [davilanza](https://github.com/davilanza)
 
 ## Screenshots
 
