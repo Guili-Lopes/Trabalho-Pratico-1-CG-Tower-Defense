@@ -2,8 +2,6 @@
 
 Jogo de defesa de torre 2D desenvolvido com JavaScript, WebGL2 e GLSL para a disciplina de Computação Gráfica.
 
-> **Status:** projeto em desenvolvimento. Os itens marcados como planejados devem ser atualizados conforme forem realmente implementados.
-
 ## O Jogo
 
 ### Lore
