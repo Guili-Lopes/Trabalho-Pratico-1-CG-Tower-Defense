@@ -1,0 +1,1 @@
+// Desconsiderar esse arquivo, é apenas para definir a arquitetura, os arquivos vão ser construídos com base na evolução do projeto

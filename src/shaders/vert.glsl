@@ -1,0 +1,1 @@
+// Codigos glsl vem nessa pasta, desconsiderar esse arquivo, é apenas para definir a arquitetura
