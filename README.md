@@ -2,8 +2,6 @@
 
 Jogo de defesa de torre 2D desenvolvido com JavaScript, WebGL2 e GLSL para a disciplina de Computação Gráfica.
 
-> **Status:** projeto em desenvolvimento. Os itens marcados como planejados devem ser atualizados conforme forem realmente implementados.
-
 ## O Jogo
 
 ### Lore
@@ -128,10 +126,10 @@ O jogo utiliza dois valores separados:
 - [ ] Loop de reinício do jogo.
 - [ ] Uso de texturas.
 
-## Criador(es)
+## Criadores
 
 - **Nome:** Guilherme Lourenço Lopes e David Lanza Melo Matos
-- **GitHub:** [preencher]
+- **GitHub:** [Guili-Lopes](https://github.com/Guili-Lopes) e [davilanza](https://github.com/davilanza)
 
 ## Screenshots
 
