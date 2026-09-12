@@ -48,9 +48,7 @@ export function multiplica(a, b) {
             let soma = 0;
 
             for (let k = 0; k < 4; k++) {
-                soma +=
-                    a[k * 4 + linha] *
-                    b[coluna * 4 + k];
+                soma += a[k * 4 + linha] * b[coluna * 4 + k];
             }
 
             resultado[coluna * 4 + linha] = soma;

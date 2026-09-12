@@ -1,16 +1,13 @@
 import { carregarShaderSprite } from "./core/shader.js";
 import { criarQuadrado } from "./core/quadrado.js";
 import { carregarTextura } from "./core/textura.js";
-
-import {
-  ortho,
-  translacao,
-  escala,
-  multiplica
-} from "./core/matrizes.js";
+import { criaInimigo, atualizaInimigo } from "./entities/inimigos.js";
+import { ortho, translacao, escala, multiplica } from "./core/matrizes.js";
 
 async function main() {
   const canvas = document.querySelector("#gameCanvas");
+  const vidaHUD = document.querySelector("#vida");
+
   const gl = canvas.getContext("webgl2");
 
   if (!gl) {
@@ -18,20 +15,45 @@ async function main() {
     return;
   }
 
+  // Redimensionamento do canvas
+  const resizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      const largura = Math.round(entry.contentRect.width);
+
+      const altura = Math.round(entry.contentRect.height);
+
+      if (canvas.width !== largura || canvas.height !== altura) {
+        canvas.width = largura;
+        canvas.height = altura;
+      }
+    }
+  });
+
+  resizeObserver.observe(canvas);
+
+  // Estado do jogo
+  const jogo = {
+    pic: {
+      x: 0,
+      y: 0,
+      vida: 100,
+      tamanho: 10,
+      raio: 5
+    },
+    inimigos: [],
+    pausado: false,
+    tempoSpawn: 0,
+    intervaloSpawn: 2
+  };
+
   // Shader
   const shaderSprite = await carregarShaderSprite(gl);
 
   // Geometria
-  const quadradoVAO = criarQuadrado(
-    gl,
-    shaderSprite.atributos
-  );
+  const quadradoVAO = criarQuadrado(gl, shaderSprite.atributos);
 
   // Texturas
-  const [
-    texturaPlaca,
-    texturaPic
-  ] = await Promise.all([
+  const [texturaPlaca, texturaPic, texturaResistor] = await Promise.all([
     carregarTextura(
       gl,
       "assets/sprites/ui/placa-queimada.png"
@@ -40,6 +62,11 @@ async function main() {
     carregarTextura(
       gl,
       "assets/sprites/ui/pic.png"
+    ),
+
+    carregarTextura(
+      gl,
+      "assets/sprites/inimigos/resistor.png"
     )
   ]);
 
@@ -62,13 +89,7 @@ async function main() {
   );
 
   // Função para desenhar sprite
-  function desenharSprite(
-    textura,
-    x,
-    y,
-    largura,
-    altura
-  ) {
+  function desenharSprite(textura, x, y, largura, altura) {
     const modelo = multiplica(
       translacao(x, y),
       escala(largura, altura)
@@ -115,56 +136,127 @@ async function main() {
     );
   }
 
+  // Atualização da cena
+  function atualizaCena(dt) {
+    jogo.tempoSpawn += dt;
+
+    if (jogo.tempoSpawn >= jogo.intervaloSpawn) {
+      jogo.tempoSpawn = 0;
+      jogo.inimigos.push(criaInimigo());
+    }
+
+    for (const inimigo of jogo.inimigos) {
+      atualizaInimigo(inimigo, jogo.pic, dt);
+    }
+  }
+
   // Desenho da cena
-  gl.viewport(
-    0,
-    0,
-    canvas.width,
-    canvas.height
-  );
+  function desenhaCena() {
+    gl.viewport(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
 
-  gl.clearColor(
-    0.1,
-    0.1,
-    0.1,
-    1.0
-  );
+    gl.clearColor(
+      0.1,
+      0.1,
+      0.1,
+      1.0
+    );
 
-  gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.clear(gl.COLOR_BUFFER_BIT);
 
-  gl.useProgram(shaderSprite.programa);
+    gl.useProgram(shaderSprite.programa);
 
-  // A projeção é a mesma para todos
-  // os objetos da cena.
-  gl.uniformMatrix4fv(
-    shaderSprite.uniforms.projecao,
-    false,
-    projecao
-  );
+    // A projeção é a mesma para todos os objetos da cena.
+    gl.uniformMatrix4fv(
+      shaderSprite.uniforms.projecao,
+      false,
+      projecao
+    );
 
-  gl.bindVertexArray(quadradoVAO);
+    gl.bindVertexArray(quadradoVAO);
 
-  // Placa ocupa o mundo inteiro: 100 x 75.
-  desenharSprite(
-    texturaPlaca,
-    0,
-    0,
-    100,
-    75
-  );
+    // Placa ocupa 100 x 75.
+    desenharSprite(
+      texturaPlaca,
+      0,
+      0,
+      100,
+      75
+    );
 
-  // PIC por cima da placa: 10 x 10.
-  desenharSprite(
-    texturaPic,
-    0,
-    0,
-    10,
-    10
-  );
+    // PIC por cima da placa 10 x 10.
+    desenharSprite(
+      texturaPic,
+      jogo.pic.x,
+      jogo.pic.y,
+      jogo.pic.tamanho,
+      jogo.pic.tamanho
+    );
 
-  gl.bindVertexArray(null);
+    // Inimigos
+    for (const inimigo of jogo.inimigos) {
+      desenharSprite(
+        texturaResistor,
+        inimigo.x,
+        inimigo.y,
+        inimigo.tamanho,
+        inimigo.tamanho
+      );
+    }
+
+    gl.bindVertexArray(null);
+
+    // Atualiza a vida mostrada no HUD.
+    if (vidaHUD) {
+      vidaHUD.textContent = jogo.pic.vida;
+    }
+  }
+
+  // Pausa
+  window.addEventListener("keydown", (event) => {
+    if (
+      event.code === "KeyP" &&
+      !event.repeat
+    ) {
+      jogo.pausado = !jogo.pausado;
+
+      console.log(
+        jogo.pausado
+          ? "Jogo pausado."
+          : "Jogo retomado."
+      );
+    }
+  });
+
+  // Loop principal
+  let tempoAnterior = null;
+
+  function loop(tempoAtual) {
+    if (tempoAnterior !== null) {
+      const dt = Math.min(
+        (tempoAtual - tempoAnterior) / 1000,
+        0.1
+      );
+
+      if (!jogo.pausado) {
+        atualizaCena(dt);
+      }
+    }
+
+    tempoAnterior = tempoAtual;
+
+    desenhaCena();
+
+    requestAnimationFrame(loop);
+  }
 
   console.log("Cena carregada com sucesso.");
+
+  requestAnimationFrame(loop);
 }
 
 main();
