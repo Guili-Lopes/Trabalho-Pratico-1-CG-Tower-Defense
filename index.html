@@ -2,14 +2,45 @@
 <html lang="pt-BR">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style.css">
+  <title>Curto-Circuito</title>
+
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
+  <div id="game-container">
+
+    <!-- Canvas do jogo -->
+    <canvas
+      id="gameCanvas"
+      width="800"
+      height="600">
+    </canvas>
+
+    <!-- HUD -->
+    <div id="hud">
+
+      <div class="hud-item">
+        Vida: <span id="vida">100</span>
+      </div>
+
+      <div class="hud-item">
+        Pontos: <span id="pontos">0</span>
+      </div>
+
+      <div class="hud-item">
+        Moedas: <span id="moedas">0</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <script type="module" src="src/main.js"></script>
 
 </body>
 
