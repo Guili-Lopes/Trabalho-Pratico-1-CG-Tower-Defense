@@ -2,7 +2,6 @@
 
 Jogo de defesa de torre 2D desenvolvido com JavaScript, WebGL2 e GLSL para a disciplina de Computação Gráfica.
 
-- **Jogo:** https://Guili-Lopes.github.io/NOME-DO-REPOSITORIO
 - **Repositório:** https://github.com/Guili-Lopes/NOME-DO-REPOSITORIO
 
 ## O Jogo
@@ -153,11 +152,10 @@ O jogo é composto pelas telas de menu inicial, jogo, loja de melhorias, *game o
 
 - **Nome:** Guilherme Lourenço Lopes
 - **GitHub:** [Guili-Lopes](https://github.com/Guili-Lopes)
-- **Contato:** SEU-EMAIL-AQUI
+- **Contato:** guilhermellopes2004@gmail.com
 
-## Media kit
+## Screenshots
 
-*Screenshots a serem adicionados antes da entrega.*
 
 ## Opcionais
 
