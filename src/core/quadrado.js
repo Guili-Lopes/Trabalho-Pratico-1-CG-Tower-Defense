@@ -24,9 +24,7 @@ export function criarQuadrado(gl, atributos) {
     // Cria e ativa o VAO.
     const vao = gl.createVertexArray();
     gl.bindVertexArray(vao);
-    // -------------------------
     // Buffer das posições
-    // -------------------------
     const bufferPosicao = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, bufferPosicao);
     gl.bufferData(
@@ -43,9 +41,7 @@ export function criarQuadrado(gl, atributos) {
         0,
         0
     );
-    // -------------------------
     // Buffer das texcoords
-    // -------------------------
     const bufferTexcoord = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, bufferTexcoord);
     gl.bufferData(
@@ -64,7 +60,6 @@ export function criarQuadrado(gl, atributos) {
     );
     // Evita alterar esse VAO acidentalmente depois.
     gl.bindVertexArray(null);
-    // Opcionalmente também limpa o ARRAY_BUFFER atual.
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
     return vao;
 }

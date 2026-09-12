@@ -35,7 +35,6 @@ body {
 
 /*
   O canvas ocupa visualmente todo o container.
-
   Os atributos width="800" e height="600"
   representam a resolução interna inicial.
 */
@@ -74,6 +73,18 @@ body {
 
   display: flex;
   gap: 24px;
+}
+/*Mudando a cor do hud só pra testar, mas na versão final vai ficar mais bonitinho*/
+#hud .hud-item:nth-child(1) {
+  color: red;
+}
+
+#hud .hud-item:nth-child(2) {
+  color: blue;
+}
+
+#hud .hud-item:nth-child(3) {
+  color: yellow;
 }
 
 /*

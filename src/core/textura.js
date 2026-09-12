@@ -39,10 +39,8 @@ export async function carregarTextura(gl, caminho) {
     imagem
   );
 
-  // Gera os níveis menores da textura.
   gl.generateMipmap(gl.TEXTURE_2D);
 
-  // Pixel art: mantém os pixels definidos, sem suavização.
   gl.texParameteri(
     gl.TEXTURE_2D,
     gl.TEXTURE_MAG_FILTER,

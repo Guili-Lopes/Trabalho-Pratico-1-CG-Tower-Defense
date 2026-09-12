@@ -18,25 +18,16 @@ async function main() {
     return;
   }
 
-  // =========================
   // Shader
-  // =========================
-
   const shaderSprite = await carregarShaderSprite(gl);
 
-  // =========================
   // Geometria
-  // =========================
-
   const quadradoVAO = criarQuadrado(
     gl,
     shaderSprite.atributos
   );
 
-  // =========================
   // Texturas
-  // =========================
-
   const [
     texturaPlaca,
     texturaPic
@@ -52,10 +43,7 @@ async function main() {
     )
   ]);
 
-  // =========================
   // Projeção
-  // =========================
-
   const projecao = ortho(
     -50,
     50,
@@ -65,10 +53,7 @@ async function main() {
     1
   );
 
-  // =========================
-  // Blending / transparência
-  // =========================
-
+  // Blending
   gl.enable(gl.BLEND);
 
   gl.blendFunc(
@@ -76,10 +61,7 @@ async function main() {
     gl.ONE_MINUS_SRC_ALPHA
   );
 
-  // =========================
   // Função para desenhar sprite
-  // =========================
-
   function desenharSprite(
     textura,
     x,
@@ -133,10 +115,7 @@ async function main() {
     );
   }
 
-  // =========================
   // Desenho da cena
-  // =========================
-
   gl.viewport(
     0,
     0,
