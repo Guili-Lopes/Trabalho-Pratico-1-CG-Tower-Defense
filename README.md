@@ -2,7 +2,7 @@
 
 Jogo de defesa de torre 2D desenvolvido com JavaScript, WebGL2 e GLSL para a disciplina de Computação Gráfica.
 
-- **Repositório:** https://github.com/Guili-Lopes/NOME-DO-REPOSITORIO
+- **Jogo:** https://guili-lopes.github.io/Trabalho-Pratico-1-CG-Tower-Defense/
 
 ## O Jogo
 
