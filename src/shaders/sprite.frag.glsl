@@ -15,7 +15,7 @@ void main() {
 
   vec3 corFinal = mix(
     corTextura.rgb,
-    vec3(1.0),
+    vec3(1.0, 0.0, 0.0),
     u_flash
   );
 
