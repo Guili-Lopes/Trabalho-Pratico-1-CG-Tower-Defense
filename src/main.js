@@ -9,8 +9,41 @@ import { atualizaProjetil } from "./entidades/projeteis.js";
 import { atualizaDisparo, verificaColisoes } from "./sistemas/combate.js";
 import { desenhaCena } from "./sistemas/render.js";
 import { atualizaHUD } from "./sistemas/hud.js";
+import { registraEntrada, atualizaEntrada } from "./sistemas/entrada.js";
 
-import { MUNDO, PIC } from "./config/atributos.js";
+import { MUNDO, PIC, FERRO } from "./config/atributos.js";
+
+function criaEstadoInicial() {
+  return {
+    pic: {
+      x: 0,
+      y: 0,
+      ...PIC,
+      tempoFlash: 0
+    },
+    mouse: {
+      x: 0,
+      y: 0
+    },
+    inimigos: [],
+    projeteis: [],
+    pontos: 0,
+    moedas: 0,
+    pausado: false,
+    acabou: false,
+    tempoSpawn: 0,
+    intervaloSpawn: 2,
+    tempoTiro: 0,
+    intervaloTiro: 1 / PIC.cadencia,
+    tempoFerro: FERRO.recarga
+  };
+}
+
+function reiniciaJogo(jogo) {
+  const novoEstado = criaEstadoInicial();
+
+  Object.assign(jogo, novoEstado);
+}
 
 async function main() {
   const canvas = document.querySelector("#gameCanvas");
@@ -39,23 +72,10 @@ async function main() {
   resizeObserver.observe(canvas);
 
   // Estado do jogo
-  const jogo = {
-    pic: {
-      x: 0,
-      y: 0,
-      ...PIC,
-      tempoFlash: 0
-    },
-    inimigos: [],
-    projeteis: [],
-    pontos: 0,
-    moedas: 0,
-    pausado: false,
-    tempoSpawn: 0,
-    intervaloSpawn: 2,
-    tempoTiro: 0,
-    intervaloTiro: 1 / PIC.cadencia
-  };
+  const jogo = criaEstadoInicial();
+
+  // Entrada do jogador
+  registraEntrada(canvas, jogo);
 
   // Shader
   const shaderSprite = await carregarShaderSprite(gl);
@@ -68,8 +88,10 @@ async function main() {
     texturaPlaca,
     texturaAlcance,
     texturaPic,
+    texturaPicDestruido,
     texturaResistor,
-    texturaPulso
+    texturaPulso,
+    texturaFerro
   ] = await Promise.all([
     carregarTextura(
       gl,
@@ -88,12 +110,22 @@ async function main() {
 
     carregarTextura(
       gl,
+      "assets/sprites/ui/pic-destruido.png"
+    ),
+
+    carregarTextura(
+      gl,
       "assets/sprites/inimigos/resistor.png"
     ),
 
     carregarTextura(
       gl,
       "assets/sprites/efeitos/pulso.png"
+    ),
+
+    carregarTextura(
+      gl,
+      "assets/sprites/ui/ferro-de-solda.png"
     )
   ]);
 
@@ -125,18 +157,23 @@ async function main() {
     projecao: projecao,
     larguraMundo: MUNDO.direita - MUNDO.esquerda,
     alturaMundo: MUNDO.cima - MUNDO.baixo,
+    tamanhoFerro: FERRO.tamanho,
     texturas: {
       placa: texturaPlaca,
       alcance: texturaAlcance,
       pic: texturaPic,
+      picDestruido: texturaPicDestruido,
       resistor: texturaResistor,
-      pulso: texturaPulso
+      pulso: texturaPulso,
+      ferro: texturaFerro
     }
   };
 
   // Atualização da cena
   function atualizaCena(dt) {
     jogo.tempoSpawn += dt;
+
+    atualizaEntrada(jogo, dt);
 
     if (jogo.pic.tempoFlash > 0) {
       jogo.pic.tempoFlash -= dt;
@@ -158,9 +195,16 @@ async function main() {
     }
 
     verificaColisoes(jogo);
+
+    // Verifica o fim do jogo
+    if (jogo.pic.vida <= 0 && !jogo.acabou) {
+      jogo.pic.vida = 0;
+      jogo.pic.tempoFlash = 0;
+      jogo.acabou = true;
+    }
   }
 
-  // Pausa
+  // Eventos de teclado
   window.addEventListener("keydown", (event) => {
     if (
       event.code === "KeyP" &&
@@ -174,6 +218,16 @@ async function main() {
           : "Jogo retomado."
       );
     }
+
+    if (
+      event.code === "KeyR" &&
+      !event.repeat &&
+      jogo.acabou
+    ) {
+      reiniciaJogo(jogo);
+
+      console.log("Jogo reiniciado.");
+    }
   });
 
   // Loop principal
@@ -186,7 +240,7 @@ async function main() {
         0.1
       );
 
-      if (!jogo.pausado) {
+      if (!jogo.pausado && !jogo.acabou) {
         atualizaCena(dt);
       }
     }

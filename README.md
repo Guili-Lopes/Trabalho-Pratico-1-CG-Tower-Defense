@@ -141,11 +141,11 @@ O jogo é composto pelas telas de menu inicial, jogo, loja de melhorias, *game o
 ### Checklist dos itens obrigatórios
 
 - [x] Torre que atira.
-- [ ] Condição de derrota com mensagem de *game over*.
+- [x] Condição de derrota com mensagem de *game over*.
 - [x] Inimigos surgindo, andando, atacando a torre e sendo derrotados.
-- [ ] Clique "dedada" nos inimigos, representado pelo ferro de solda.
+- [x] Clique "dedada" nos inimigos, representado pelo ferro de solda.
 - [x] HUD com vida do PIC e pontuação.
-- [ ] Loop de reinício do jogo.
+- [x] Loop de reinício do jogo.
 - [x] Uso de texturas.
 
 ## Criador

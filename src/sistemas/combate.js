@@ -1,6 +1,24 @@
 import { criaProjetil } from "../entidades/projeteis.js";
 import { PULSO } from "../config/atributos.js";
 
+// Aplica dano a um inimigo e verifica sua morte
+export function aplicaDanoAoInimigo(jogo, indice, dano) {
+  const inimigo = jogo.inimigos[indice];
+
+  inimigo.vida -= dano * (1 - inimigo.reducaoDano);
+
+  // Ativa o flash de dano
+  inimigo.tempoFlash = 0.08;
+
+  // Verifica se o inimigo morreu
+  if (inimigo.vida <= 0) {
+    jogo.inimigos.splice(indice, 1);
+
+    jogo.pontos += inimigo.pontos;
+    jogo.moedas += inimigo.moedas;
+  }
+}
+
 // Procura o inimigo mais próximo dentro do alcance do PIC
 export function encontraAlvo(jogo) {
   let alvoMaisProximo = null;
@@ -82,22 +100,14 @@ export function verificaColisoes(jogo) {
 
       // Colisão círculo-círculo
       if (dx * dx + dy * dy <= somaRaios * somaRaios) {
-        // Aplica o dano considerando a redução do inimigo
-        inimigo.vida -= projetil.dano * (1 - inimigo.reducaoDano);
-
-        // Ativa o flash de dano
-        inimigo.tempoFlash = 0.08;
+        aplicaDanoAoInimigo(
+          jogo,
+          j,
+          projetil.dano
+        );
 
         // O projétil desaparece ao atingir o primeiro inimigo
         jogo.projeteis.splice(i, 1);
-
-        // Verifica se o inimigo morreu
-        if (inimigo.vida <= 0) {
-          jogo.inimigos.splice(j, 1);
-
-          jogo.pontos += inimigo.pontos;
-          jogo.moedas += inimigo.moedas;
-        }
 
         break;
       }

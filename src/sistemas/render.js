@@ -111,7 +111,7 @@ export function desenhaCena(render, jogo) {
   // PIC por cima da placa
   desenharSprite(
     render,
-    render.texturas.pic,
+    jogo.acabou ? render.texturas.picDestruido : render.texturas.pic,
     jogo.pic.x,
     jogo.pic.y,
     jogo.pic.tamanho,
@@ -143,6 +143,16 @@ export function desenhaCena(render, jogo) {
       projetil.tamanho
     );
   }
+
+  // Ferro de solda
+  desenharSprite(
+    render,
+    render.texturas.ferro,
+    jogo.mouse.x,
+    jogo.mouse.y,
+    render.tamanhoFerro,
+    render.tamanhoFerro
+  );
 
   gl.bindVertexArray(null);
 }
