@@ -6,7 +6,7 @@ import { ortho } from "./renderizacao/matrizes.js";
 import { criaInimigo, atualizaInimigo } from "./entidades/inimigos.js";
 import { atualizaProjetil } from "./entidades/projeteis.js";
 
-import { atualizaDisparo, verificaColisoes } from "./sistemas/combate.js";
+import { atualizaDisparo, verificaColisoes, atualizaMira } from "./sistemas/combate.js";
 import { desenhaCena } from "./sistemas/render.js";
 import { atualizaHUD } from "./sistemas/hud.js";
 import { registraEntrada, atualizaEntrada } from "./sistemas/entrada.js";
@@ -19,7 +19,8 @@ function criaEstadoInicial() {
       x: 0,
       y: 0,
       ...PIC,
-      tempoFlash: 0
+      tempoFlash: 0,
+      angulo: 0
     },
     mouse: {
       x: 0,
@@ -188,6 +189,8 @@ async function main() {
       atualizaInimigo(inimigo, jogo.pic, dt);
     }
 
+    // Faz o pic "mirar" no inimigo mais perto
+    atualizaMira(jogo);
     atualizaDisparo(jogo, dt);
 
     for (const projetil of jogo.projeteis) {

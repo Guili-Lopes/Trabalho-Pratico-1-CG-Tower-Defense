@@ -57,3 +57,17 @@ export function multiplica(a, b) {
 
     return resultado;
 }
+
+export function rotacaoZ(angulo) {
+    const matriz = identidade();
+
+    const c = Math.cos(angulo);
+    const s = Math.sin(angulo);
+
+    matriz[0] = c;
+    matriz[1] = s;
+    matriz[4] = -s;
+    matriz[5] = c;
+
+    return matriz;
+}

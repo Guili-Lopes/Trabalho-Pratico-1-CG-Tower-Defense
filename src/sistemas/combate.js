@@ -100,11 +100,7 @@ export function verificaColisoes(jogo) {
 
       // Colisão círculo-círculo
       if (dx * dx + dy * dy <= somaRaios * somaRaios) {
-        aplicaDanoAoInimigo(
-          jogo,
-          j,
-          projetil.dano
-        );
+        aplicaDanoAoInimigo(jogo, j, projetil.dano);
 
         // O projétil desaparece ao atingir o primeiro inimigo
         jogo.projeteis.splice(i, 1);
@@ -113,4 +109,14 @@ export function verificaColisoes(jogo) {
       }
     }
   }
+}
+
+export function atualizaMira(jogo) {
+    const alvo = encontraAlvo(jogo);
+
+    if (alvo) {
+        const dx = alvo.x - jogo.pic.x;
+        const dy = alvo.y - jogo.pic.y;
+        jogo.pic.angulo = Math.atan2(dy, dx) - Math.PI / 2;
+    }
 }

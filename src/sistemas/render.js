@@ -1,4 +1,4 @@
-import { translacao, escala, multiplica } from "../renderizacao/matrizes.js";
+import { translacao, escala, multiplica, rotacaoZ } from "../renderizacao/matrizes.js";
 
 // Desenha um sprite na cena
 export function desenharSprite(
@@ -8,12 +8,13 @@ export function desenharSprite(
   y,
   largura,
   altura,
-  flash = 0.0
+  flash = 0.0,
+  angulo = 0.0
 ) {
   const gl = render.gl;
 
   const modelo = multiplica(
-    translacao(x, y),
+    multiplica(translacao(x, y), rotacaoZ(angulo)),
     escala(largura, altura)
   );
 
@@ -116,7 +117,8 @@ export function desenhaCena(render, jogo) {
     jogo.pic.y,
     jogo.pic.tamanho,
     jogo.pic.tamanho,
-    jogo.pic.tempoFlash > 0 ? 1.0 : 0.0
+    jogo.pic.tempoFlash > 0 ? 1.0 : 0.0,
+    jogo.pic.angulo
   );
 
   // Inimigos
@@ -148,8 +150,8 @@ export function desenhaCena(render, jogo) {
   desenharSprite(
     render,
     render.texturas.ferro,
-    jogo.mouse.x,
-    jogo.mouse.y,
+    jogo.mouse.x + 3,   // Ajuste pra colocar a ponta do ferro na ponta do mouse e o clique ficar certinho
+    jogo.mouse.y +2.7,  // Ajuste pra colocar a ponta do ferro na ponta do mouse e o clique ficar certinho
     render.tamanhoFerro,
     render.tamanhoFerro
   );
