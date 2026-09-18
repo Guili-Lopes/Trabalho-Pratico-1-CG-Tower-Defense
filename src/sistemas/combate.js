@@ -12,6 +12,21 @@ export function aplicaDanoAoInimigo(jogo, indice, dano) {
 
   // Verifica se o inimigo morreu
   if (inimigo.vida <= 0) {
+    // Verifica se o inimigo possui descarga ao morrer
+    if (inimigo.descargaRaio) {
+      const dx = jogo.pic.x - inimigo.x;
+      const dy = jogo.pic.y - inimigo.y;
+
+      const distanciaQuadrada = dx * dx + dy * dy;
+      const raioQuadrado = inimigo.descargaRaio * inimigo.descargaRaio;
+
+      // Aplica a descarga no PIC se estiver dentro do raio
+      if (distanciaQuadrada <= raioQuadrado) {
+        jogo.pic.vida -= inimigo.descargaDano;
+        jogo.pic.tempoFlash = 0.15;
+      }
+    }
+
     jogo.inimigos.splice(indice, 1);
 
     jogo.pontos += inimigo.pontos;

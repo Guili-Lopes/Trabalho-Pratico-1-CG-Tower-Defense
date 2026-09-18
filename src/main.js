@@ -85,50 +85,74 @@ async function main() {
   const quadradoVAO = criarQuadrado(gl, shaderSprite.atributos);
 
   // Texturas
-  const [
-    texturaPlaca,
-    texturaAlcance,
-    texturaPic,
-    texturaPicDestruido,
-    texturaResistor,
-    texturaPulso,
-    texturaFerro
-  ] = await Promise.all([
-    carregarTextura(
-      gl,
-      "assets/sprites/ui/placa-queimada.png"
-    ),
+const [
+  texturaPlaca,
+  texturaAlcance,
+  texturaPic,
+  texturaPicDestruido,
+  texturaResistor,
+  texturaCapacitor,
+  texturaIndutor,
+  texturaDiodo,
+  texturaTransistor,
+  texturaPulso,
+  texturaFerro
+] = await Promise.all([
+  carregarTextura(
+    gl,
+    "assets/sprites/ui/placa-queimada.png"
+  ),
 
-    carregarTextura(
-      gl,
-      "assets/sprites/efeitos/alcance.png"
-    ),
+  carregarTextura(
+    gl,
+    "assets/sprites/efeitos/alcance.png"
+  ),
 
-    carregarTextura(
-      gl,
-      "assets/sprites/ui/pic.png"
-    ),
+  carregarTextura(
+    gl,
+    "assets/sprites/ui/pic.png"
+  ),
 
-    carregarTextura(
-      gl,
-      "assets/sprites/ui/pic-destruido.png"
-    ),
+  carregarTextura(
+    gl,
+    "assets/sprites/ui/pic-destruido.png"
+  ),
 
-    carregarTextura(
-      gl,
-      "assets/sprites/inimigos/resistor.png"
-    ),
+  carregarTextura(
+    gl,
+    "assets/sprites/inimigos/resistor.png"
+  ),
 
-    carregarTextura(
-      gl,
-      "assets/sprites/efeitos/pulso.png"
-    ),
+  carregarTextura(
+    gl,
+    "assets/sprites/inimigos/capacitor.png"
+  ),
 
-    carregarTextura(
-      gl,
-      "assets/sprites/ui/ferro-de-solda.png"
-    )
-  ]);
+  carregarTextura(
+    gl,
+    "assets/sprites/inimigos/indutor.png"
+  ),
+
+  carregarTextura(
+    gl,
+    "assets/sprites/inimigos/diodo.png"
+  ),
+
+  carregarTextura(
+    gl,
+    "assets/sprites/inimigos/transistor.png"
+  ),
+
+  carregarTextura(
+    gl,
+    "assets/sprites/efeitos/pulso.png"
+  ),
+
+  carregarTextura(
+    gl,
+    "assets/sprites/ui/ferro-de-solda.png"
+  )
+]);
 
   // Projeção
   const projecao = ortho(
@@ -165,9 +189,13 @@ async function main() {
       pic: texturaPic,
       picDestruido: texturaPicDestruido,
       resistor: texturaResistor,
+      capacitor: texturaCapacitor,
+      indutor: texturaIndutor,
+      diodo: texturaDiodo,
+      transistor: texturaTransistor,
       pulso: texturaPulso,
       ferro: texturaFerro
-    }
+}
   };
 
   // Atualização da cena
