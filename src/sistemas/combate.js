@@ -87,6 +87,7 @@ export function atualizaDisparo(jogo, dt) {
       jogo.pic.y,
       direcaoX,
       direcaoY,
+      jogo.pic.velocidadePulso,
       jogo.pic.dano
     )
   );

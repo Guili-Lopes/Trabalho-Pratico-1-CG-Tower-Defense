@@ -8,19 +8,30 @@ import { atualizaProjetil } from "./entidades/projeteis.js";
 
 import { atualizaDisparo, verificaColisoes, atualizaMira } from "./sistemas/combate.js";
 import { desenhaCena } from "./sistemas/render.js";
-import { atualizaHUD } from "./sistemas/hud.js";
+import { atualizaHUD, registraHUD } from "./sistemas/hud.js";
 import { registraEntrada, atualizaEntrada } from "./sistemas/entrada.js";
+import { montaFila, calculaIntervaloSpawn } from "./sistemas/ondas.js";
+import { aplicaMelhorias, sorteiaCartoes } from "./sistemas/melhorias.js";
 
 import { MUNDO, PIC, FERRO } from "./config/atributos.js";
 
+/* Teste da fila
+console.log("Onda 1:", montaFila(1));
+console.log("Onda 2:", montaFila(2));
+console.log("Onda 3:", montaFila(3));
+console.log("Onda 4:", montaFila(4));
+console.log("Onda 5:", montaFila(5));
+*/
+
 function criaEstadoInicial() {
-  return {
+  const fila = montaFila(1);
+
+  const estado = {
     pic: {
       x: 0,
       y: 0,
       ...PIC,
-      tempoFlash: 0,
-      angulo: 0
+      tempoFlash: 0
     },
     mouse: {
       x: 0,
@@ -32,12 +43,34 @@ function criaEstadoInicial() {
     moedas: 0,
     pausado: false,
     acabou: false,
+
+    onda: 1,
+    fila: fila,
+    totalDaOnda: fila.length,
+    emIntervalo: false,
     tempoSpawn: 0,
-    intervaloSpawn: 2,
+
     tempoTiro: 0,
     intervaloTiro: 1 / PIC.cadencia,
-    tempoFerro: FERRO.recarga
+    tempoFerro: FERRO.recarga,
+
+    melhorias: {
+      resistor: 0,
+      capacitor: 0,
+      indutor: 0,
+      diodo: 0,
+      transistor: 0,
+      ferro: 0
+    },
+
+    cartoes: [],
+    disparosDesdeDescarga: 0,
+    tempoDiodo: 0
   };
+
+  aplicaMelhorias(estado);
+
+  return estado;
 }
 
 function reiniciaJogo(jogo) {
@@ -74,6 +107,14 @@ async function main() {
 
   // Estado do jogo
   const jogo = criaEstadoInicial();
+
+  registraEntrada(canvas, jogo);
+  registraHUD(jogo);
+
+  /* Debug para mostrar a onda 
+  console.log(jogo.fila);
+  console.log(jogo.totalDaOnda);
+  */
 
   // Entrada do jogador
   registraEntrada(canvas, jogo);
@@ -198,63 +239,71 @@ const [
 }
   };
 
-  // Atualização da cena
-  function atualizaCena(dt) {
+// Atualização da cena
+function atualizaCena(dt) {
+  atualizaEntrada(jogo, dt);
+
+  if (jogo.pic.tempoFlash > 0) {
+    jogo.pic.tempoFlash -= dt;
+  }
+
+  // Controla o surgimento dos inimigos da onda
+  if (!jogo.emIntervalo && jogo.fila.length > 0) {
     jogo.tempoSpawn += dt;
 
-    atualizaEntrada(jogo, dt);
+    const intervaloSpawn = calculaIntervaloSpawn(
+      jogo.fila.length,
+      jogo.totalDaOnda
+    );
 
-    if (jogo.pic.tempoFlash > 0) {
-      jogo.pic.tempoFlash -= dt;
-    }
-
-    if (jogo.tempoSpawn >= jogo.intervaloSpawn) {
+    if (jogo.tempoSpawn >= intervaloSpawn) {
       jogo.tempoSpawn = 0;
-      jogo.inimigos.push(criaInimigo("resistor"));
-    }
 
-    for (const inimigo of jogo.inimigos) {
-      atualizaInimigo(inimigo, jogo.pic, dt);
-    }
+      const tipo = jogo.fila.shift();
 
-    // Faz o pic "mirar" no inimigo mais perto
-    atualizaMira(jogo);
-    atualizaDisparo(jogo, dt);
-
-    for (const projetil of jogo.projeteis) {
-      atualizaProjetil(projetil, dt);
-    }
-
-    verificaColisoes(jogo);
-
-    // Verifica o fim do jogo
-    if (jogo.pic.vida <= 0 && !jogo.acabou) {
-      jogo.pic.vida = 0;
-      jogo.pic.tempoFlash = 0;
-      jogo.acabou = true;
+      jogo.inimigos.push(
+        criaInimigo(tipo)
+      );
     }
   }
 
+  for (const inimigo of jogo.inimigos) {
+    atualizaInimigo(inimigo, jogo, dt);
+  }
+
+  atualizaMira(jogo, dt);
+  atualizaDisparo(jogo, dt);
+
+  for (const projetil of jogo.projeteis) {
+    atualizaProjetil(projetil, dt);
+  }
+
+  verificaColisoes(jogo);
+
+  // Verifica se todos os inimigos da onda foram derrotados
+  if (!jogo.emIntervalo && jogo.fila.length === 0 && jogo.inimigos.length === 0) {
+    jogo.emIntervalo = true;
+    jogo.tempoSpawn = 0;
+    jogo.cartoes = sorteiaCartoes(jogo);
+  }
+
+  // Verifica o fim do jogo
+  if (jogo.pic.vida <= 0 && !jogo.acabou) {
+    jogo.pic.vida = 0;
+    jogo.pic.tempoFlash = 0;
+    jogo.acabou = true;
+  }
+}
+
   // Eventos de teclado
   window.addEventListener("keydown", (event) => {
-    if (
-      event.code === "KeyP" &&
-      !event.repeat
-    ) {
+    if (event.code === "KeyP" && !event.repeat) {
       jogo.pausado = !jogo.pausado;
-
-      console.log(
-        jogo.pausado
-          ? "Jogo pausado."
-          : "Jogo retomado."
-      );
+ 
+      console.log(jogo.pausado ? "Jogo pausado." : "Jogo retomado.");
     }
 
-    if (
-      event.code === "KeyR" &&
-      !event.repeat &&
-      jogo.acabou
-    ) {
+    if (event.code === "KeyR" && !event.repeat && jogo.acabou) {
       reiniciaJogo(jogo);
 
       console.log("Jogo reiniciado.");
@@ -266,10 +315,7 @@ const [
 
   function loop(tempoAtual) {
     if (tempoAnterior !== null) {
-      const dt = Math.min(
-        (tempoAtual - tempoAnterior) / 1000,
-        0.1
-      );
+      const dt = Math.min((tempoAtual - tempoAnterior) / 1000, 0.1);
 
       if (!jogo.pausado && !jogo.acabou) {
         atualizaCena(dt);

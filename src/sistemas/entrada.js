@@ -49,11 +49,7 @@ export function registraEntrada(canvas, jogo) {
 
       // Colisão ponto-círculo
       if (dx * dx + dy * dy <= inimigo.raio * inimigo.raio) {
-        aplicaDanoAoInimigo(
-          jogo,
-          i,
-          FERRO.dano
-        );
+        aplicaDanoAoInimigo(jogo, i, jogo.ferroDano);
 
         jogo.tempoFerro = 0;
 

@@ -1,12 +1,19 @@
-import { PIC, PULSO } from "../config/atributos.js";
+import { PULSO } from "../config/atributos.js";
 
-export function criaProjetil(x, y, direcaoX, direcaoY, dano) {
+export function criaProjetil(
+  x,
+  y,
+  direcaoX,
+  direcaoY,
+  velocidade,
+  dano
+) {
   return {
     x: x,
     y: y,
     direcaoX: direcaoX,
     direcaoY: direcaoY,
-    velocidade: PIC.velocidadePulso,
+    velocidade: velocidade,
     dano: dano,
     raio: PULSO.raio,
     tamanho: PULSO.tamanho,

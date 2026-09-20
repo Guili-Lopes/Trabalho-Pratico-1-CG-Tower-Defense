@@ -173,15 +173,13 @@ Os itens abaixo foram escolhidos para o projeto. Aqueles marcados com `[x]` é a
 
 - [ ] **Trailer:** em vez de um vídeo simples, faça um vídeo mais rebuscado e chamativo, potencialmente um pouco maior, com um pouco de edição.
 
-- [ ] **Inimigos diferentes:** faça inimigos visual e mecanicamente diferentes, como com velocidades distintas, frequência de ataque, dano etc.
+- [x] **Inimigos diferentes:** faça inimigos visual e mecanicamente diferentes, como com velocidades distintas, frequência de ataque, dano etc.
 
-- [ ] **Inimigos em ondas:** crie o conceito de ondas de inimigos (fases) para que o jogador possa conciliar momentos de maior tensão ou maior relaxamento (no intervalinho entre ondas). As ondas podem ser "fases curadas" e finitas, ou infinitas (com aumento de dificuldade).
+- [x] **Inimigos em ondas:** crie o conceito de ondas de inimigos (fases) para que o jogador possa conciliar momentos de maior tensão ou maior relaxamento (no intervalinho entre ondas). As ondas podem ser "fases curadas" e finitas, ou infinitas (com aumento de dificuldade).
 
-- [ ] **Colisão entre inimigos:** tome o cuidado para evitar que "um inimigo entre no outro", verificando se estão colidindo ao atualizar suas posições.
+- [x] **Progressão da torre:** permita ao jogador melhorar a(s) torre(s) eventualmente, por exemplo, aumentando sua cadência, ou seu alcance, ou seu dano etc. Uma estratégia interessante é a adotada por jogos "roguelike" ou "roguelite", que é a ideia de oferecer umas 3x opções de *upgrade* aleatórios ao jogador cada vez que ele tiver a oportunidade de melhorar uma torre.
 
-- [ ] **Progressão da torre:** permita ao jogador melhorar a(s) torre(s) eventualmente, por exemplo, aumentando sua cadência, ou seu alcance, ou seu dano etc. Uma estratégia interessante é a adotada por jogos "roguelike" ou "roguelite", que é a ideia de oferecer umas 3x opções de *upgrade* aleatórios ao jogador cada vez que ele tiver a oportunidade de melhorar uma torre.
-
-- [ ] **Moedas:** crie uma moeda que o jogador adquire, de alguma forma, e que pode ser usada para: (a) melhorias na(s) torre(s), ou (b) criar novas torres, ou (c) para melhorias do herói, ou para outro motivo interessante.
+- [x] **Moedas:** crie uma moeda que o jogador adquire, de alguma forma, e que pode ser usada para: (a) melhorias na(s) torre(s), ou (b) criar novas torres, ou (c) para melhorias do herói, ou para outro motivo interessante.
 
 ## Créditos
 

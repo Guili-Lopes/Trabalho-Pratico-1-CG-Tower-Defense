@@ -45,7 +45,9 @@ export function criaInimigo(tipo) {
   };
 }
 
-export function atualizaInimigo(inimigo, alvo, dt) {
+export function atualizaInimigo(inimigo, jogo, dt) {
+  const alvo = jogo.pic;
+
   // Atualiza o tempo do flash de dano
   if (inimigo.tempoFlash > 0) {
     inimigo.tempoFlash -= dt;
@@ -57,7 +59,9 @@ export function atualizaInimigo(inimigo, alvo, dt) {
 
     if (inimigo.tempoAtaque >= inimigo.intervaloAtaque) {
       inimigo.tempoAtaque = 0;
-      alvo.vida -= inimigo.dano;
+
+      alvo.vida -= inimigo.dano * (1 - alvo.reducaoDano);
+
       alvo.tempoFlash = 0.15;
     }
 
@@ -79,7 +83,14 @@ export function atualizaInimigo(inimigo, alvo, dt) {
   const direcaoX = dx / comprimento;
   const direcaoY = dy / comprimento;
 
-  inimigo.x += direcaoX * inimigo.velocidade * dt;
+  let velocidade = inimigo.velocidade;
 
-  inimigo.y += direcaoY * inimigo.velocidade * dt;
+  // Aplica a lentidão do campo do indutor
+  if (jogo.campoRaio > 0 && comprimento <= jogo.campoRaio) {
+    velocidade *= (1 - jogo.lentidao);
+  }
+
+  inimigo.x += direcaoX * velocidade * dt;
+
+  inimigo.y += direcaoY * velocidade * dt;
 }
