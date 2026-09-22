@@ -15,6 +15,9 @@ const moedasLojaHUD = document.querySelector("#moedas-loja");
 const cartoesHUD = document.querySelector("#cartoes");
 const botaoProximaOnda = document.querySelector("#btn-proxima-onda");
 
+const vitoriaHUD = document.querySelector("#vitoria");
+const pontosVitoriaHUD = document.querySelector("#pontos-vitoria");
+
 const iconesMelhorias = {
   resistor: "assets/sprites/melhorias/resistor.png",
   capacitor: "assets/sprites/melhorias/capacitor.png",
@@ -148,6 +151,7 @@ export function atualizaHUD(jogo) {
 
   atualizaGameOver(jogo);
   atualizaLoja(jogo);
+  atualizaVitoria(jogo);
 }
 
 export function registraHUD(jogo) {
@@ -162,4 +166,20 @@ export function registraHUD(jogo) {
 
     iniciaProximaOnda(jogo);
   });
+}
+
+function atualizaVitoria(jogo) {
+  if (!vitoriaHUD) {
+    return;
+  }
+
+  if (jogo.venceu) {
+    vitoriaHUD.classList.remove("oculto");
+
+    if (pontosVitoriaHUD) {
+      pontosVitoriaHUD.textContent = jogo.pontos;
+    }
+  } else {
+    vitoriaHUD.classList.add("oculto");
+  }
 }

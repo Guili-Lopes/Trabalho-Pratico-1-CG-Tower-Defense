@@ -14,60 +14,76 @@
 
   <div id="game-container">
 
-    <!-- Canvas do jogo -->
-    <canvas
-      id="gameCanvas"
-      width="800"
-      height="600">
-    </canvas>
+        <!-- Canvas do jogo -->
+        <canvas
+        id="gameCanvas"
+        width="800"
+        height="600">
+        </canvas>
 
-    <!-- HUD -->
-    <div id="hud">
+        <!-- HUD -->
+        <div id="hud">
 
-      <div class="hud-item">
-        Vida: <span id="vida">100</span>
-      </div>
+        <div class="hud-item">
+            Vida: <span id="vida">100</span>
+        </div>
 
-      <div class="hud-item">
-        Pontos: <span id="pontos">0</span>
-      </div>
+        <div class="hud-item">
+            Pontos: <span id="pontos">0</span>
+        </div>
 
-      <div class="hud-item">
-        Moedas: <span id="moedas">0</span>
-      </div>
+        <div class="hud-item">
+            Moedas: <span id="moedas">0</span>
+        </div>
 
-    </div>
+        </div>
 
-    <!-- Tela de Game Over -->
-    <div id="gameover" class="oculto">
-      <h1>GAME OVER</h1>
-
-      <p>
-        Pontuação final:
-        <span id="pontos-finais">0</span>
-      </p>
-    </div>
-
-  </div>
-
-  <script type="module" src="src/main.js"></script>
-
-    <!-- Loja entre as ondas -->
-    <div id="loja" class="oculto">
-
-        <h2>
-            Onda <span id="numero-onda">1</span> concluída
-        </h2>
+        <!-- Tela de Game Over -->
+        <div id="gameover" class="oculto">
+        <h1>GAME OVER</h1>
 
         <p>
-            Moedas: <span id="moedas-loja">0</span>
+            Pontuação final:
+            <span id="pontos-finais">0</span>
         </p>
+        </div>
 
-        <div id="cartoes"></div>
+        <!-- Tela de vitória -->
+        <div id="vitoria" class="oculto">
 
-        <button id="btn-proxima-onda">
-            Iniciar próxima onda
-        </button>
+            <h1>PLACA SALVA</h1>
+
+            <p>
+                Pontuação final:
+                <span id="pontos-vitoria">0</span>
+            </p>
+
+            <p>
+                Pressione R para jogar novamente
+            </p>
+
+        </div>
+
+    </div>
+
+    <script type="module" src="src/main.js"></script>
+
+        <!-- Loja entre as ondas -->
+        <div id="loja" class="oculto">
+
+            <h2>
+                Onda <span id="numero-onda">1</span> concluída
+            </h2>
+
+            <p>
+                Moedas: <span id="moedas-loja">0</span>
+            </p>
+
+            <div id="cartoes"></div>
+
+            <button id="btn-proxima-onda">
+                Iniciar próxima onda
+            </button>
 
     </div>
 

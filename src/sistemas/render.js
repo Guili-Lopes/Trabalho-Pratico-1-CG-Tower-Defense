@@ -99,6 +99,18 @@ export function desenhaCena(render, jogo) {
     render.alturaMundo
   );
 
+    // Campo do indutor
+  if (jogo.campoRaio > 0) {
+    desenharSprite(
+      render,
+      render.texturas.campoIndutor,
+      jogo.pic.x,
+      jogo.pic.y,
+      jogo.campoRaio * 2,
+      jogo.campoRaio * 2
+    );
+  }
+
   // Anel de alcance do PIC
   desenharSprite(
     render,
@@ -125,7 +137,7 @@ export function desenhaCena(render, jogo) {
   for (const inimigo of jogo.inimigos) {
     desenharSprite(
       render,
-      render.texturas[inimigo.tipo],
+      render.texturas[inimigo.textura],
       inimigo.x,
       inimigo.y,
       inimigo.tamanho,
@@ -144,6 +156,20 @@ export function desenhaCena(render, jogo) {
       projetil.tamanho,
       projetil.tamanho
     );
+  }
+
+  // Efeitos visuais
+  for (const efeito of jogo.efeitos) {
+    if (efeito.tipo === "descarga") {
+      desenharSprite(
+        render,
+        render.texturas.descarga,
+        efeito.x,
+        efeito.y,
+        efeito.tamanho,
+        efeito.tamanho
+      );
+    }
   }
 
   // Ferro de solda

@@ -13,7 +13,9 @@ import { registraEntrada, atualizaEntrada } from "./sistemas/entrada.js";
 import { montaFila, calculaIntervaloSpawn } from "./sistemas/ondas.js";
 import { aplicaMelhorias, sorteiaCartoes } from "./sistemas/melhorias.js";
 
-import { MUNDO, PIC, FERRO } from "./config/atributos.js";
+import { MUNDO, PIC, FERRO, ONDAS } from "./config/atributos.js";
+
+import { atualizaEfeitos } from "./sistemas/efeitos.js";
 
 /* Teste da fila
 console.log("Onda 1:", montaFila(1));
@@ -38,11 +40,13 @@ function criaEstadoInicial() {
       y: 0
     },
     inimigos: [],
+    efeitos: [],
     projeteis: [],
     pontos: 0,
     moedas: 0,
     pausado: false,
     acabou: false,
+    venceu: false,
 
     onda: 1,
     fila: fila,
@@ -136,8 +140,11 @@ const [
   texturaIndutor,
   texturaDiodo,
   texturaTransistor,
+  texturaTransistorAvalanche,
   texturaPulso,
-  texturaFerro
+  texturaFerro,
+  texturaCampoIndutor,
+  texturaDescarga
 ] = await Promise.all([
   carregarTextura(
     gl,
@@ -186,12 +193,26 @@ const [
 
   carregarTextura(
     gl,
+    "assets/sprites/inimigos/transistor-avalanche.png"
+  ),
+
+  carregarTextura(
+    gl,
     "assets/sprites/efeitos/pulso.png"
   ),
 
   carregarTextura(
     gl,
     "assets/sprites/ui/ferro-de-solda.png"
+  ),
+    carregarTextura(
+    gl,
+    "assets/sprites/efeitos/campo-indutor.png"
+  ),
+
+  carregarTextura(
+    gl,
+    "assets/sprites/efeitos/descarga.png"
   )
 ]);
 
@@ -234,8 +255,11 @@ const [
       indutor: texturaIndutor,
       diodo: texturaDiodo,
       transistor: texturaTransistor,
+      transistorAvalanche: texturaTransistorAvalanche,
       pulso: texturaPulso,
-      ferro: texturaFerro
+      ferro: texturaFerro,
+      campoIndutor: texturaCampoIndutor,
+      descarga: texturaDescarga
 }
   };
 
@@ -278,13 +302,20 @@ function atualizaCena(dt) {
     atualizaProjetil(projetil, dt);
   }
 
+  atualizaEfeitos(jogo, dt);
+
   verificaColisoes(jogo);
 
   // Verifica se todos os inimigos da onda foram derrotados
   if (!jogo.emIntervalo && jogo.fila.length === 0 && jogo.inimigos.length === 0) {
-    jogo.emIntervalo = true;
-    jogo.tempoSpawn = 0;
-    jogo.cartoes = sorteiaCartoes(jogo);
+    // Última onda concluída
+    if (jogo.onda >= ONDAS.length) {
+      jogo.venceu = true;
+    } else {
+      jogo.emIntervalo = true;
+      jogo.tempoSpawn = 0;
+      jogo.cartoes = sorteiaCartoes(jogo);
+    }
   }
 
   // Verifica o fim do jogo
@@ -303,7 +334,7 @@ function atualizaCena(dt) {
       console.log(jogo.pausado ? "Jogo pausado." : "Jogo retomado.");
     }
 
-    if (event.code === "KeyR" && !event.repeat && jogo.acabou) {
+    if (event.code === "KeyR" && !event.repeat && (jogo.acabou || jogo.venceu)) {
       reiniciaJogo(jogo);
 
       console.log("Jogo reiniciado.");
@@ -317,7 +348,7 @@ function atualizaCena(dt) {
     if (tempoAnterior !== null) {
       const dt = Math.min((tempoAtual - tempoAnterior) / 1000, 0.1);
 
-      if (!jogo.pausado && !jogo.acabou) {
+      if (!jogo.pausado && !jogo.acabou && !jogo.venceu) {
         atualizaCena(dt);
       }
     }
@@ -326,6 +357,26 @@ function atualizaCena(dt) {
 
     desenhaCena(render, jogo);
     atualizaHUD(jogo);
+
+    /* Debug das melhorias
+    console.log({
+      melhorias: jogo.melhorias,
+
+      danoPIC: jogo.pic.dano,
+      cadenciaPIC: jogo.pic.cadencia,
+      velocidadePulso: jogo.pic.velocidadePulso,
+      reducaoDanoPIC: jogo.pic.reducaoDano,
+
+      ferroDano: jogo.ferroDano,
+
+      campoRaio: jogo.campoRaio,
+      lentidao: jogo.lentidao,
+
+      intervaloDiodo: jogo.intervaloDiodo,
+      tempoDiodo: jogo.tempoDiodo,
+
+      disparosDesdeDescarga: jogo.disparosDesdeDescarga
+    });*/
 
     requestAnimationFrame(loop);
   }

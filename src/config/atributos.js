@@ -204,6 +204,10 @@ export const ONDAS = [
       capacitor: 1,
       indutor: 2,
       diodo: 1
+    },
+    
+    {
+      transistor: 1
     }
   ]
 ];
@@ -269,11 +273,11 @@ export const EFEITOS = {
 
   indutorRaios: [
     0,
-    14,
-    18,
-    22
+    24,
+    30,
+    36
   ],
-  indutorLentidao: 0.03,
+  indutorLentidao: 0.1,
 
   diodoIntervalos: [
     0,

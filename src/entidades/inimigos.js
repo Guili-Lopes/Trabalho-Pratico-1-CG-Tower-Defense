@@ -41,7 +41,12 @@ export function criaInimigo(tipo) {
     y: y,
     estado: "andando",
     tempoAtaque: config.intervaloAtaque,
-    tempoFlash: 0
+    tempoFlash: 0,
+    // Atributos só do transistor
+    danoAcumulado: 0,
+    emAvalanche: false,
+    tempoAvalanche: 0,
+    textura: tipo
   };
 }
 
@@ -53,6 +58,16 @@ export function atualizaInimigo(inimigo, jogo, dt) {
     inimigo.tempoFlash -= dt;
   }
 
+  // Atualiza o estado de avalanche
+  if (inimigo.emAvalanche) {
+    inimigo.tempoAvalanche -= dt;
+
+    if (inimigo.tempoAvalanche <= 0) {
+      inimigo.emAvalanche = false;
+      inimigo.textura = inimigo.tipo;
+    }
+  }
+
   // Se estiver atacando, não se move
   if (inimigo.estado === "atacando") {
     inimigo.tempoAtaque += dt;
@@ -60,7 +75,9 @@ export function atualizaInimigo(inimigo, jogo, dt) {
     if (inimigo.tempoAtaque >= inimigo.intervaloAtaque) {
       inimigo.tempoAtaque = 0;
 
-      alvo.vida -= inimigo.dano * (1 - alvo.reducaoDano);
+      const dano = inimigo.emAvalanche ? inimigo.danoAvalanche : inimigo.dano;
+
+      alvo.vida -= dano * (1 - alvo.reducaoDano);
 
       alvo.tempoFlash = 0.15;
     }
@@ -83,7 +100,7 @@ export function atualizaInimigo(inimigo, jogo, dt) {
   const direcaoX = dx / comprimento;
   const direcaoY = dy / comprimento;
 
-  let velocidade = inimigo.velocidade;
+  let velocidade = inimigo.emAvalanche ? inimigo.velocidadeAvalanche : inimigo.velocidade;
 
   // Aplica a lentidão do campo do indutor
   if (jogo.campoRaio > 0 && comprimento <= jogo.campoRaio) {
