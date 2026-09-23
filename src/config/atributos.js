@@ -14,8 +14,8 @@ export const PIC = {
     raio: 5,
 
     alcance: 22,
-    dano: 10,
-    cadencia: 1.5,           
+    dano: 13,
+    cadencia: 1.6,           
     velocidadePulso: 60
 };
 
@@ -66,7 +66,7 @@ export const INIMIGOS = {
 
     indutor: {
         nome: "Indutor saturado",
-        vida: 90,
+        vida: 80,
         velocidade: 5.5,
         dano: 4,
         intervaloAtaque: 1.5,
@@ -93,7 +93,7 @@ export const INIMIGOS = {
 
     transistor: {
         nome: "Transistor em avalanche",
-        vida: 600,
+        vida: 300,
         velocidade: 4,
         dano: 25,
         intervaloAtaque: 2.5,
@@ -106,7 +106,7 @@ export const INIMIGOS = {
         limiteAvalanche: 150,     // dano acumulado para disparar
         duracaoAvalanche: 3,
         velocidadeAvalanche: 12,
-        danoAvalanche: 60
+        danoAvalanche: 40
     }
 };
 
@@ -221,42 +221,42 @@ export const RITMO = {
 export const MELHORIAS = {
   resistor: {
     nome: "Resistor",
-    descricao: "Reduz o dano recebido pelo PIC em 5% por nível, chegando a 15%",
+    descricao: "Reduz o dano recebido pelo PIC em 8% por nível, chegando a 24%",
     preco: 40,
     nivelMaximo: 3
   },
 
   capacitor: {
     nome: "Capacitor",
-    descricao: "Aumenta o dano do PIC em 5% por nível, chegando a 15%. A cada 10 disparos, libera uma descarga em área",
+    descricao: "Aumenta o dano do PIC em 13% por nível, chegando a 39%. A cada 10 disparos, libera uma descarga em área",
     preco: 45,
     nivelMaximo: 3
   },
 
   indutor: {
     nome: "Indutor",
-    descricao: "Cria um campo ao redor do PIC. A cada nível, o campo aumenta e reduz a velocidade dos inimigos em mais 3%",
+    descricao: "Cria um campo ao redor do PIC que aumenta a cada nível e reduz a velocidade dos inimigos em 10% por nível, chegando a 30%",
     preco: 45,
     nivelMaximo: 3
   },
 
   diodo: {
     nome: "Diodo",
-    descricao: "Bloqueia periodicamente um ataque recebido pelo PIC. A recarga diminui para 20 s, 14 s e 8 s",
+    descricao: "Bloqueia periodicamente um ataque recebido pelo PIC. A recarga diminui para 18 s, 12 s e 7 s",
     preco: 50,
     nivelMaximo: 3
   },
 
   transistor: {
     nome: "Transistor",
-    descricao: "Aumenta a cadência de disparo e a velocidade dos pulsos em 7% por nível, chegando a 21%",
+    descricao: "Aumenta a cadência de disparo e a velocidade dos pulsos em 12% por nível, chegando a 36%",
     preco: 45,
     nivelMaximo: 3
   },
 
   ferro: {
     nome: "Ferro de solda",
-    descricao: "Aumenta o dano causado pelos cliques em 5% por nível, chegando a 15%",
+    descricao: "Aumenta o dano causado pelos cliques em 25% por nível, chegando a 75%",
     preco: 35,
     nivelMaximo: 3
   }
@@ -266,7 +266,7 @@ export const MELHORIAS = {
 export const EFEITOS = {
   resistorReducao: 0.08,
 
-  capacitorDano: 0.10,
+  capacitorDano: 0.13,
   capacitorDescargaRaio: 14,
   capacitorDescargaDano: 15,
   capacitorDisparos: 10,

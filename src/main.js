@@ -339,6 +339,7 @@ function atualizaCena(dt) {
       tocaSom("vitoria");
       jogo.venceu = true;
     } else {
+      jogo.pic.vida = Math.min(PIC.vida, jogo.pic.vida + 10);
       jogo.emIntervalo = true;
       jogo.tempoSpawn = 0;
       jogo.cartoes = sorteiaCartoes(jogo);

@@ -51,7 +51,7 @@ export function aplicaDanoAoInimigo(jogo, indice, dano) {
 
       // Aplica a descarga no PIC se estiver dentro do raio
       if (distanciaQuadrada <= raioQuadrado) {
-        jogo.pic.vida -= inimigo.descargaDano;
+        jogo.pic.vida -= inimigo.descargaDano * (1 - jogo.pic.reducaoDano);
         jogo.pic.tempoFlash = 0.15;
       }
     }
