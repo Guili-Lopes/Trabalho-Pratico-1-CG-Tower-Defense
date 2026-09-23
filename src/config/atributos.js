@@ -93,7 +93,7 @@ export const INIMIGOS = {
 
     transistor: {
         nome: "Transistor em avalanche",
-        vida: 300,
+        vida: 450,
         velocidade: 4,
         dano: 25,
         intervaloAtaque: 2.5,
