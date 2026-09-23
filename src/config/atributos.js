@@ -264,9 +264,9 @@ export const MELHORIAS = {
 
 // Efeitos das melhorias
 export const EFEITOS = {
-  resistorReducao: 0.05,
+  resistorReducao: 0.08,
 
-  capacitorDano: 0.05,
+  capacitorDano: 0.10,
   capacitorDescargaRaio: 14,
   capacitorDescargaDano: 15,
   capacitorDisparos: 10,
@@ -286,7 +286,7 @@ export const EFEITOS = {
     8
   ],
 
-  transistorBonus: 0.07,
+  transistorBonus: 0.12,
 
-  ferroDano: 0.05
+  ferroDano: 0.25
 };
