@@ -44,9 +44,13 @@ function criaEstadoInicial() {
     projeteis: [],
     pontos: 0,
     moedas: 0,
+
+    iniciado: false,
     pausado: false,
     acabou: false,
     venceu: false,
+    mostrandoComoJogar: false,
+    mostrandoCreditos: false,
 
     onda: 1,
     fila: fila,
@@ -81,6 +85,8 @@ function reiniciaJogo(jogo) {
   const novoEstado = criaEstadoInicial();
 
   Object.assign(jogo, novoEstado);
+
+  jogo.iniciado = iniciar;
 }
 
 async function main() {
@@ -113,7 +119,18 @@ async function main() {
   const jogo = criaEstadoInicial();
 
   registraEntrada(canvas, jogo);
-  registraHUD(jogo);
+  registraHUD(
+  jogo,
+  {
+    reiniciar: () => {
+      reiniciaJogo(jogo, true);
+    },
+
+    voltarMenu: () => {
+      reiniciaJogo(jogo, false);
+    }
+  }
+);
 
   /* Debug para mostrar a onda 
   console.log(jogo.fila);
@@ -132,6 +149,7 @@ async function main() {
   // Texturas
 const [
   texturaPlaca,
+  texturaPlacaConsertada,
   texturaAlcance,
   texturaPic,
   texturaPicDestruido,
@@ -149,6 +167,11 @@ const [
   carregarTextura(
     gl,
     "assets/sprites/ui/placa-queimada.png"
+  ),
+
+  carregarTextura(
+    gl,
+    "assets/sprites/ui/placa.png"
   ),
 
   carregarTextura(
@@ -247,6 +270,7 @@ const [
     tamanhoFerro: FERRO.tamanho,
     texturas: {
       placa: texturaPlaca,
+      placaConsertada: texturaPlacaConsertada,
       alcance: texturaAlcance,
       pic: texturaPic,
       picDestruido: texturaPicDestruido,
@@ -329,13 +353,17 @@ function atualizaCena(dt) {
   // Eventos de teclado
   window.addEventListener("keydown", (event) => {
     if (event.code === "KeyP" && !event.repeat) {
+        if (!jogo.iniciado || jogo.acabou || jogo.venceu || jogo.emIntervalo) {
+          return;
+        }
+
       jogo.pausado = !jogo.pausado;
- 
+
       console.log(jogo.pausado ? "Jogo pausado." : "Jogo retomado.");
     }
 
     if (event.code === "KeyR" && !event.repeat && (jogo.acabou || jogo.venceu)) {
-      reiniciaJogo(jogo);
+      reiniciaJogo(jogo, true);
 
       console.log("Jogo reiniciado.");
     }
@@ -348,7 +376,7 @@ function atualizaCena(dt) {
     if (tempoAnterior !== null) {
       const dt = Math.min((tempoAtual - tempoAnterior) / 1000, 0.1);
 
-      if (!jogo.pausado && !jogo.acabou && !jogo.venceu) {
+      if (jogo.iniciado && !jogo.pausado && !jogo.acabou && !jogo.venceu) {
         atualizaCena(dt);
       }
     }

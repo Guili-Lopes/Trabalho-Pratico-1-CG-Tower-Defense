@@ -3,89 +3,472 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Curto-Circuito</title>
 
-  <link rel="stylesheet" href="style.css">
+  <link
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=Barlow+Semi+Condensed:wght@400;500;600&display=swap"
+    rel="stylesheet"
+  >
+
+  <link
+    rel="stylesheet"
+    href="style.css"
+  >
 </head>
 
 <body>
 
   <div id="game-container">
 
-        <!-- Canvas do jogo -->
-        <canvas
-        id="gameCanvas"
-        width="800"
-        height="600">
-        </canvas>
+    <canvas
+      id="gameCanvas"
+      width="800"
+      height="600"
+    ></canvas>
 
-        <!-- HUD -->
-        <div id="hud">
+    <!-- HUD -->
+    <div id="hud">
 
-        <div class="hud-item">
-            Vida: <span id="vida">100</span>
+      <!-- Vida e onda -->
+      <div class="vida-bloco">
+
+        <div class="leitura leitura-vida">
+
+          <img
+            class="icone"
+            src="assets/sprites/hud/raio-vida.png"
+            alt=""
+          >
+
+          <span
+            id="vida"
+            class="numero"
+          >
+            100
+          </span>
+
         </div>
 
-        <div class="hud-item">
-            Pontos: <span id="pontos">0</span>
+        <div class="vida-trilho">
+
+          <div
+            id="vida-preenchimento"
+            class="vida-preenchimento"
+          ></div>
+
         </div>
 
-        <div class="hud-item">
-            Moedas: <span id="moedas">0</span>
-        </div>
+        <span
+          id="onda-atual"
+          class="onda-atual"
+        >
+          Onda 1 de 5
+        </span>
+
+      </div>
+
+      <!-- Pontuação e moedas -->
+      <div class="hud-direita">
+
+        <div class="leitura">
+
+          <img
+            class="icone"
+            src="assets/sprites/hud/pontuacao.png"
+            alt=""
+          >
+
+          <span
+            id="pontos"
+            class="numero"
+          >
+            0
+          </span>
 
         </div>
 
-        <!-- Tela de Game Over -->
-        <div id="gameover" class="oculto">
-        <h1>GAME OVER</h1>
+        <div class="leitura">
+
+          <img
+            class="icone"
+            src="assets/sprites/hud/moeda.png"
+            alt=""
+          >
+
+          <span
+            id="moedas"
+            class="numero"
+          >
+            0
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Menu -->
+    <div
+      id="menu"
+      class="tela tela-menu oculto"
+    >
+
+      <img
+        class="logo"
+        src="assets/sprites/hud/logo.png"
+        alt="Curto-Circuito"
+      >
+
+      <p class="subtitulo">
+        DEFESA DE TORRE
+      </p>
+
+      <p class="texto-menu">
+        A placa queimou e os componentes se voltaram contra o núcleo
+        Proteja o PIC
+      </p>
+
+      <div class="menu-acoes">
+
+        <button
+          id="btn-iniciar"
+          class="botao"
+        >
+          Iniciar partida
+        </button>
+
+        <button
+          id="btn-como-jogar"
+          class="botao botao-secundario"
+        >
+          Como jogar
+        </button>
+
+        <button
+          id="btn-creditos"
+          class="botao botao-secundario"
+        >
+          Créditos
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Como jogar -->
+    <div
+    id="como-jogar"
+    class="tela tela-info oculto"
+    >
+
+    <h1>COMO JOGAR</h1>
+
+    <div class="painel painel-info">
+
+        <span class="designador">
+        SYS
+        </span>
+
+        <h2>Objetivo</h2>
+        <p>
+        Proteja o PIC no centro da placa até o fim da quinta onda
+        </p>
+
+        <h2>Controles</h2>
+        <ul class="lista-info">
+        <li>Mova o mouse para mirar o ferro de solda</li>
+        <li>Clique sobre os inimigos para causar dano com o ferro</li>
+        <li>O PIC dispara automaticamente nos inimigos ao alcance</li>
+        <li>Pressione P para pausar e continuar a partida</li>
+        <li>Pressione R para reiniciar após derrota ou vitória</li>
+        </ul>
+
+        <h2>Entre as ondas</h2>
+        <ul class="lista-info">
+        <li>Compre melhorias para fortalecer o PIC</li>
+        <li>Escolha bem, pois só três cartões aparecem por vez</li>
+        <li>Use as moedas obtidas derrotando inimigos</li>
+        </ul>
+
+    </div>
+
+    <button
+        id="btn-voltar-como-jogar"
+        class="botao"
+    >
+        Voltar
+    </button>
+
+    </div>
+
+    <!-- Créditos -->
+    <div
+    id="creditos"
+    class="tela tela-info oculto"
+    >
+
+    <h1>CRÉDITOS</h1>
+
+    <div class="painel painel-info">
+
+        <span class="designador">
+        DEV
+        </span>
 
         <p>
-            Pontuação final:
-            <span id="pontos-finais">0</span>
+        <strong>Desenvolvedor</strong>
+        <br>
+        Guilherme Lourenço Lopes
         </p>
-        </div>
 
-        <!-- Tela de vitória -->
-        <div id="vitoria" class="oculto">
+        <p>
+        <strong>Contato</strong>
+        <br>
+        <a href="mailto:guilhermellopes2004@gmail.com">
+            guilhermellopes2004@gmail.com
+        </a>
+        </p>
 
-            <h1>PLACA SALVA</h1>
+        <p>
+        <strong>Repositório do jogo</strong>
+        <br>
+        <a
+            href="https://github.com/Guili-Lopes/Trabalho-Pratico-1-CG-Tower-Defense.git"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            github.com/Guili-Lopes/Trabalho-Pratico-1-CG-Tower-Defense.git
+        </a>
+        </p>
 
-            <p>
-                Pontuação final:
-                <span id="pontos-vitoria">0</span>
-            </p>
+    </div>
 
-            <p>
-                Pressione R para jogar novamente
-            </p>
-
-        </div>
+    <button
+        id="btn-voltar-creditos"
+        class="botao"
+    >
+        Voltar
+    </button>
 
     </div>
 
-    <script type="module" src="src/main.js"></script>
+    <!-- Loja -->
+    <div
+      id="loja"
+      class="tela tela-loja oculto"
+    >
 
-        <!-- Loja entre as ondas -->
-        <div id="loja" class="oculto">
+      <div class="loja-cabecalho">
 
-            <h2>
-                Onda <span id="numero-onda">1</span> concluída
-            </h2>
+        <h2>
+          Onda
+          <span id="numero-onda">1</span>
+          concluída
+        </h2>
 
-            <p>
-                Moedas: <span id="moedas-loja">0</span>
-            </p>
+        <div class="moedas-disponiveis">
 
-            <div id="cartoes"></div>
+          <img
+            src="assets/sprites/hud/moeda.png"
+            alt=""
+          >
 
-            <button id="btn-proxima-onda">
-                Iniciar próxima onda
-            </button>
+          <span id="moedas-loja">0</span>
+
+          <span>moedas</span>
+
+        </div>
+
+      </div>
+
+      <div id="cartoes"></div>
+
+      <button
+        id="btn-proxima-onda"
+        class="botao"
+      >
+        Iniciar próxima onda
+      </button>
 
     </div>
+
+    <!-- Pausa -->
+    <div
+      id="pausa"
+      class="tela tela-pausa oculto"
+    >
+
+      <h1 class="titulo-pausa">
+        PAUSA
+      </h1>
+
+      <div class="menu-acoes">
+
+        <button
+          id="btn-continuar"
+          class="botao"
+        >
+          Continuar
+        </button>
+
+        <button
+          id="btn-reiniciar"
+          class="botao botao-secundario"
+        >
+          Reiniciar partida
+        </button>
+
+        <button
+          id="btn-menu"
+          class="botao botao-secundario"
+        >
+          Voltar ao menu
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- Game Over -->
+    <div
+      id="gameover"
+      class="tela tela-derrota oculto"
+    >
+
+      <div>
+
+        <p class="subtitulo">
+          O NÚCLEO FOI DESTRUÍDO
+        </p>
+
+        <h1 class="titulo-resultado">
+          PLACA
+          <br>
+          QUEIMADA
+        </h1>
+
+      </div>
+
+      <div class="painel painel-resultado">
+
+        <span class="designador">
+          U1
+        </span>
+
+        <p>
+          Pontuação
+        </p>
+
+        <div
+          id="pontos-finais"
+          class="valor-grande"
+        >
+          0
+        </div>
+
+        <p id="onda-derrota">
+          O núcleo não resistiu
+        </p>
+
+      </div>
+
+      <div class="rodape-teclas">
+
+        pressione
+
+        <span class="tecla">
+          R
+        </span>
+
+        para jogar novamente
+
+      </div>
+
+    </div>
+
+    <!-- Vitória -->
+    <div
+      id="vitoria"
+      class="tela tela-vitoria oculto"
+    >
+
+      <div>
+
+        <p class="subtitulo">
+          O TRANSISTOR FOI CONTIDO
+        </p>
+
+        <h1 class="titulo-resultado">
+          PLACA
+          <br>
+          SALVA
+        </h1>
+
+      </div>
+
+      <div class="painel painel-resultado">
+
+        <span class="designador">
+          U1
+        </span>
+
+        <p>
+          Pontuação
+        </p>
+
+        <div
+          id="pontos-vitoria"
+          class="valor-grande"
+        >
+          0
+        </div>
+
+        <p>
+          Cinco ondas
+          <br>
+          núcleo intacto
+        </p>
+
+      </div>
+
+      <div class="rodape-teclas">
+
+        pressione
+
+        <span class="tecla">
+          R
+        </span>
+
+        para jogar novamente
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script
+    type="module"
+    src="src/main.js"
+  ></script>
 
 </body>
 

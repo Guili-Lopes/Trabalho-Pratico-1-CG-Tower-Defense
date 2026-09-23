@@ -1,3 +1,23 @@
+:root {
+  --mask: #10301d;
+  --mask-dark: #081a10;
+  --mask-light: #1a4a2d;
+
+  --copper: #d9a441;
+  --copper-dim: #8c6a2b;
+  --copper-glow: #f0c164;
+
+  --silk: #e8ede6;
+  --silk-dim: #9aa79b;
+
+  --led: #39d7e8;
+  --amber: #f2c14e;
+  --scorch: #c4442a;
+
+  --display: "Silkscreen", monospace;
+  --texto: "Barlow Semi Condensed", system-ui, sans-serif;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -10,19 +30,18 @@ body {
 
 body {
   margin: 0;
-  background: #111;
+
+  background: #060d09;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
   overflow: hidden;
+
+  font-family: var(--texto);
 }
 
-/*
-  Container de referência para o canvas
-  e para toda interface posicionada sobre ele
-*/
 #game-container {
   position: relative;
 
@@ -31,12 +50,12 @@ body {
 
   max-width: 100vw;
   max-height: 100vh;
+
+  overflow: hidden;
 }
 
 /*
-  O canvas ocupa visualmente todo o container
-  Os atributos width="800" e height="600"
-  representam a resolução interna inicial
+  Canvas WebGL
 */
 #gameCanvas {
   display: block;
@@ -46,259 +65,742 @@ body {
 }
 
 /*
-  HUD sobre a faixa superior do canvas
+  HUD
 */
 #hud {
   position: absolute;
 
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: auto;
+  inset: 0;
 
   z-index: 10;
 
-  /*
-    Faz os cliques atravessarem o HUD
-    e chegarem ao canvas
-  */
-  pointer-events: none;
-
-  padding: 16px;
-
-  color: white;
-  font-family: Arial, sans-serif;
-  font-size: 20px;
+  padding: 14px 16px;
 
   display: flex;
-  gap: 24px;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  pointer-events: none;
+
+  isolation: isolate;
 }
 
-/*
-  Mudando a cor do HUD só pra testar
-  mas na versão final vai ficar mais bonitinho
-*/
-#hud .hud-item:nth-child(1) {
-  color: red;
-}
+#hud::before {
+  content: "";
 
-#hud .hud-item:nth-child(2) {
-  color: blue;
-}
-
-#hud .hud-item:nth-child(3) {
-  color: yellow;
-}
-
-/*
-  Loja exibida entre as ondas
-*/
-#loja {
   position: absolute;
 
   top: 0;
   left: 0;
 
   width: 100%;
+  height: 96px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(3, 10, 7, 0.92) 0%,
+    rgba(3, 10, 7, 0.76) 55%,
+    rgba(3, 10, 7, 0) 100%
+  );
+
+  z-index: -1;
+
+  pointer-events: none;
+}
+
+.vida-bloco {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  padding: 10px 12px;
+
+  background: rgba(5, 18, 11, 0.9);
+
+  border: 2px solid var(--copper-dim);
+
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.35);
+}
+
+.leitura {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  min-width: 110px;
+
+  padding: 9px 12px;
+
+  background: rgba(5, 18, 11, 0.9);
+
+  border: 2px solid var(--copper-dim);
+
+  box-shadow: 0 0 14px rgba(0, 0, 0, 0.35);
+}
+
+.leitura-vida {
+  min-width: 0;
+
+  padding: 0;
+
+  background: none;
+
+  border: none;
+
+  box-shadow: none;
+
+  justify-content: flex-start;
+}
+
+.leitura .icone {
+  width: 26px;
+  height: 26px;
+
+  object-fit: contain;
+
+  image-rendering: pixelated;
+}
+
+.leitura .numero {
+  min-width: 3ch;
+
+  font-family: var(--display);
+  font-size: 17px;
+
+  color: var(--silk);
+
+  text-align: right;
+
+  text-shadow: 0 1px 0 #000;
+}
+
+.vida-trilho {
+  position: relative;
+
+  width: 230px;
+  height: 18px;
+
+  background: var(--mask-dark);
+
+  border: 2px solid var(--copper-dim);
+
+  overflow: hidden;
+}
+
+/*
+  Preenchimento da barra de vida
+*/
+.vida-preenchimento {
+  width: 100%;
   height: 100%;
 
-  background: rgba(0, 0, 0, 0.8);
+  background: var(--led);
+
+  box-shadow:
+    0 0 12px rgba(57, 215, 232, 0.6);
+
+  transition:
+    width 0.22s,
+    background 0.22s,
+    box-shadow 0.22s;
+}
+
+.vida-preenchimento.media {
+  background: var(--amber);
+
+  box-shadow:
+    0 0 12px rgba(242, 193, 78, 0.6);
+}
+
+.vida-preenchimento.baixa {
+  background: var(--scorch);
+
+  box-shadow:
+    0 0 12px rgba(196, 68, 42, 0.6);
+}
+
+.vida-trilho::after {
+  content: "";
+
+  position: absolute;
+
+  inset: 0;
+
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 9px,
+      var(--mask-dark) 9px 12px
+    );
+
+  pointer-events: none;
+}
+
+.onda-atual {
+  font-family: var(--display);
+  font-size: 12px;
+
+  color: var(--silk);
+
+  letter-spacing: 0.08em;
+
+  text-shadow: 0 1px 0 #000;
+}
+
+.hud-direita {
+  display: flex;
+
+  gap: 12px;
+}
+
+.tela {
+  position: absolute;
+
+  inset: 0;
+
+  z-index: 30;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 
-  padding: 24px;
+  gap: 26px;
 
-  color: white;
+  padding: 30px;
+
   text-align: center;
-  font-family: Arial, sans-serif;
+}
 
-  z-index: 20;
-
-  /*
-    Permite interação com os botões da loja
-  */
+.tela-menu,
+.tela-pausa,
+.tela-loja {
   pointer-events: auto;
 }
 
-#loja h2 {
-  margin: 0 0 8px;
-
-  font-size: 36px;
+.tela-derrota,
+.tela-vitoria {
+  pointer-events: none;
 }
 
-#loja > p {
-  margin: 0 0 24px;
+.tela-menu {
+  background: rgba(6, 13, 9, 0.86);
+}
 
-  font-size: 22px;
+.tela-pausa {
+  background: rgba(6, 13, 9, 0.9);
+}
+
+.tela-loja {
+  background: rgba(6, 13, 9, 0.92);
+}
+
+.tela-derrota {
+  background: rgba(38, 8, 4, 0.88);
+}
+
+.tela-vitoria {
+  background: rgba(6, 32, 24, 0.88);
 }
 
 /*
-  Container dos cartões da loja
+  Logo
 */
-#cartoes {
-  width: 100%;
+.logo {
+  width: min(360px, 60%);
 
+  image-rendering: pixelated;
+}
+
+h1 {
+  margin: 0;
+
+  font-family: var(--display);
+
+  font-size: clamp(
+    22px,
+    4.6vw,
+    46px
+  );
+
+  line-height: 1.25;
+
+  color: var(--copper);
+
+  text-shadow:
+    0 4px 0 #5c4118,
+    0 0 26px rgba(217, 164, 65, 0.35);
+}
+
+h2 {
+  margin: 0 0 6px;
+
+  font-family: var(--display);
+
+  font-size: clamp(
+    15px,
+    2.4vw,
+    24px
+  );
+
+  color: var(--silk);
+}
+
+p {
+  margin: 0;
+
+  font-size: clamp(
+    14px,
+    1.7vw,
+    18px
+  );
+
+  color: var(--silk-dim);
+}
+
+.subtitulo {
+  font-family: var(--display);
+
+  font-size: clamp(
+    9px,
+    1.3vw,
+    12px
+  );
+
+  letter-spacing: 0.22em;
+
+  color: var(--copper-dim);
+}
+
+.texto-menu {
+  max-width: 40ch;
+}
+
+.titulo-pausa {
+  font-size: clamp(
+    20px,
+    3.4vw,
+    34px
+  );
+}
+
+.titulo-resultado {
+  margin-top: 10px;
+}
+
+.tela-derrota h1 {
+  color: var(--scorch);
+
+  text-shadow:
+    0 4px 0 #5a1c10,
+    0 0 30px rgba(196, 68, 42, 0.45);
+}
+
+.tela-vitoria h1 {
+  color: var(--led);
+
+  text-shadow:
+    0 4px 0 #14555e,
+    0 0 30px rgba(57, 215, 232, 0.45);
+}
+
+.valor-grande {
+  font-family: var(--display);
+
+  font-size: clamp(
+    20px,
+    3.2vw,
+    34px
+  );
+
+  color: var(--copper);
+}
+
+.painel {
+  position: relative;
+
+  padding: 28px 32px;
+
+  background:
+    rgba(8, 26, 16, 0.92);
+
+  border:
+    2px solid var(--silk-dim);
+
+  background-image:
+    radial-gradient(
+      circle 6px at 14px 14px,
+      var(--copper-glow) 0 2px,
+      var(--copper) 2px 4px,
+      var(--copper-dim) 4px 6px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle 6px at calc(100% - 14px) 14px,
+      var(--copper-glow) 0 2px,
+      var(--copper) 2px 4px,
+      var(--copper-dim) 4px 6px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle 6px at 14px calc(100% - 14px),
+      var(--copper-glow) 0 2px,
+      var(--copper) 2px 4px,
+      var(--copper-dim) 4px 6px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle 6px at calc(100% - 14px) calc(100% - 14px),
+      var(--copper-glow) 0 2px,
+      var(--copper) 2px 4px,
+      var(--copper-dim) 4px 6px,
+      transparent 6px
+    );
+
+  background-repeat: no-repeat;
+}
+
+.designador {
+  position: absolute;
+
+  top: -11px;
+  left: 26px;
+
+  padding: 0 8px;
+
+  background: var(--mask-dark);
+
+  font-family: var(--display);
+  font-size: 11px;
+
+  letter-spacing: 0.08em;
+
+  color: var(--silk-dim);
+}
+
+.painel-resultado {
+  min-width: 250px;
+}
+
+.painel-resultado p:last-child {
+  margin-top: 10px;
+}
+
+/*
+  Botões
+*/
+.botao {
+  padding: 13px 26px;
+
+  background: var(--copper);
+
+  border:
+    2px solid var(--copper-glow);
+
+  box-shadow:
+    0 5px 0 var(--copper-dim);
+
+  font-family: var(--display);
+
+  font-size: clamp(
+    11px,
+    1.5vw,
+    14px
+  );
+
+  letter-spacing: 0.04em;
+
+  color: var(--mask-dark);
+
+  cursor: pointer;
+
+  transition:
+    transform 0.06s,
+    box-shadow 0.06s,
+    background 0.12s;
+}
+
+.botao:hover {
+  background: var(--copper-glow);
+}
+
+.botao:active {
+  transform: translateY(5px);
+
+  box-shadow:
+    0 0 0 var(--copper-dim);
+}
+
+.botao:focus-visible {
+  outline:
+    3px solid var(--led);
+
+  outline-offset: 3px;
+}
+
+.botao:disabled {
+  background: #4a4a44;
+
+  border-color: #5d5d55;
+
+  box-shadow:
+    0 5px 0 #2d2d29;
+
+  color: #8d8d85;
+
+  cursor: not-allowed;
+}
+
+.botao-secundario {
+  background: transparent;
+
+  color: var(--silk);
+
+  border-color: var(--silk-dim);
+
+  box-shadow:
+    0 5px 0 #2a3a30;
+}
+
+.botao-secundario:hover {
+  background:
+    rgba(232, 237, 230, 0.12);
+}
+
+/*
+  Menu
+*/
+.menu-acoes {
+  width: min(260px, 70%);
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 13px;
+}
+
+.menu-acoes .botao {
+  width: 100%;
+}
+
+.tela-info {
+  background: rgba(6, 13, 9, 0.9);
+
+  pointer-events: auto;
+}
+
+.painel-info {
+  width: min(640px, 82%);
+  max-width: 640px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  text-align: left;
+}
+
+.painel-info h2 {
+  margin: 8px 0 0;
+
+  font-size: 18px;
+}
+
+.painel-info p {
+  color: var(--silk);
+}
+
+.lista-info {
+  margin: 0;
+  padding-left: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  color: var(--silk);
+}
+
+#creditos a {
+  color: var(--led);
+  text-decoration: none;
+
+  word-break: break-word;
+}
+
+#creditos a:hover {
+  text-decoration: underline;
+}
+
+/*
+  Loja
+*/
+.loja-cabecalho {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 6px;
+}
+
+.moedas-disponiveis {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  font-family: var(--display);
+
+  font-size: clamp(
+    13px,
+    2vw,
+    17px
+  );
+
+  color: var(--copper);
+}
+
+.moedas-disponiveis img {
+  width: 22px;
+  height: 22px;
+
+  object-fit: contain;
+
+  image-rendering: pixelated;
+}
+
+#cartoes {
   display: flex;
   justify-content: center;
   align-items: stretch;
 
-  gap: 20px;
-
-  margin-bottom: 28px;
+  gap: 18px;
 }
 
 /*
   Cartão de melhoria
 */
 .cartao-melhoria {
-  width: 220px;
-  min-height: 300px;
-
-  padding: 16px;
-
-  background: rgba(20, 25, 30, 0.95);
-
-  border: 2px solid #777;
+  width: clamp(
+    150px,
+    19vw,
+    205px
+  );
 
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  gap: 9px;
+
+  padding:
+    20px 16px 16px;
 }
 
-/*
-  Ícone da melhoria
-*/
-.cartao-melhoria img {
-  width: 72px;
-  height: 72px;
+.cartao-melhoria .icone-melhoria {
+  width: 62px;
+  height: 62px;
 
   object-fit: contain;
 
   image-rendering: pixelated;
 
-  margin-bottom: 12px;
+  background: var(--mask-dark);
+
+  border:
+    2px solid var(--copper-dim);
 }
 
-.cartao-melhoria h3 {
-  margin: 0 0 8px;
+.cartao-melhoria .nome {
+  font-family: var(--display);
 
-  font-size: 22px;
-}
+  font-size: 13px;
 
-.cartao-melhoria .nivel {
-  margin: 0 0 12px;
-
-  font-size: 16px;
+  color: var(--silk);
 }
 
 .cartao-melhoria .descricao {
   flex: 1;
 
-  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.38;
 
-  font-size: 15px;
-  line-height: 1.4;
+  color: var(--silk-dim);
 }
 
 .cartao-melhoria .preco {
-  margin: 0 0 12px;
+  font-family: var(--display);
 
-  font-size: 18px;
+  font-size: 12px;
+
+  color: var(--copper);
 }
 
-/*
-  Botões da loja
-*/
-.cartao-melhoria button,
-#btn-proxima-onda {
-  border: none;
+.niveis {
+  display: flex;
 
-  padding: 10px 16px;
-
-  font-size: 16px;
-  font-weight: bold;
-
-  cursor: pointer;
+  gap: 6px;
 }
 
-.cartao-melhoria button:disabled {
-  cursor: not-allowed;
+.pad {
+  width: 11px;
+  height: 11px;
 
-  opacity: 0.45;
+  border-radius: 50%;
+
+  border:
+    2px solid var(--copper-dim);
+
+  background: transparent;
 }
 
-#btn-proxima-onda {
-  padding: 12px 24px;
+.pad.cheio {
+  background: var(--copper);
 
-  font-size: 18px;
+  box-shadow:
+    0 0 9px rgba(217, 164, 65, 0.7);
 }
 
-/*
-  Telas de fim de jogo
-*/
-#gameover,
-#vitoria {
+.cartao-melhoria .botao {
+  width: 100%;
+
+  padding: 10px;
+}
+
+.rodape-teclas {
   position: absolute;
 
-  top: 0;
-  left: 0;
+  bottom: 18px;
 
-  width: 100%;
-  height: 100%;
+  font-size: 13px;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-
-  color: white;
-  text-align: center;
-  font-family: Arial, sans-serif;
-
-  z-index: 30;
-
-  /*
-    Os cliques continuam atravessando
-    as telas de fim de jogo
-  */
-  pointer-events: none;
+  color: var(--silk-dim);
 }
 
-/*
-  Tela de derrota
-*/
-#gameover {
-  background: rgba(0, 0, 0, 0.75);
+.tecla {
+  display: inline-block;
+
+  min-width: 20px;
+
+  padding: 1px 6px;
+  margin: 0 2px;
+
+  background: var(--mask-dark);
+
+  border:
+    1px solid var(--copper-dim);
+
+  font-family: var(--display);
+
+  font-size: 10px;
+
+  color: var(--copper);
 }
 
-/*
-  Tela de vitória
-*/
-#vitoria {
-  background: rgba(0, 45, 35, 0.82);
-}
-
-#gameover h1,
-#vitoria h1 {
-  margin: 0 0 16px;
-
-  font-size: 64px;
-}
-
-#gameover p,
-#vitoria p {
-  margin: 6px 0;
-
-  font-size: 24px;
-}
-
-/*
-  Esconde telas que não estão ativas
-*/
 .oculto {
   display: none !important;
 }

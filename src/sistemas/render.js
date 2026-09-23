@@ -92,7 +92,7 @@ export function desenhaCena(render, jogo) {
   // Placa ocupa o mundo inteiro
   desenharSprite(
     render,
-    render.texturas.placa,
+    jogo.venceu ? render.texturas.placaConsertada : render.texturas.placa,
     0,
     0,
     render.larguraMundo,
