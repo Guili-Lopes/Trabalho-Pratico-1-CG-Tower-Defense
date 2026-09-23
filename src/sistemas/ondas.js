@@ -1,5 +1,7 @@
 import { ONDAS, RITMO } from "../config/atributos.js";
 
+import { tocaSom } from "./audio.js";
+
 export function embaralha(array) {
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -52,6 +54,7 @@ export function calculaIntervaloSpawn(quantidadeRestante, totalDaOnda) {
 }
 
 export function iniciaProximaOnda(jogo) {
+  tocaSom("onda");
   const proximaOnda = jogo.onda + 1;
   const novaFila = montaFila(proximaOnda);
 

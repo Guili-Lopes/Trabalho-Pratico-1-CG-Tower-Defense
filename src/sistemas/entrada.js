@@ -1,4 +1,7 @@
 import { MUNDO, FERRO } from "../config/atributos.js";
+
+import { tocaSom } from "./audio.js";
+
 import { aplicaDanoAoInimigo } from "./combate.js";
 
 function converteParaMundo(canvas, evento) {
@@ -46,7 +49,7 @@ export function registraEntrada(canvas, jogo) {
 
       const dx = inimigo.x - posicao.x;
       const dy = inimigo.y - posicao.y;
-
+      tocaSom("solda");
       // Colisão ponto-círculo
       if (dx * dx + dy * dy <= inimigo.raio * inimigo.raio) {
         aplicaDanoAoInimigo(jogo, i, jogo.ferroDano);

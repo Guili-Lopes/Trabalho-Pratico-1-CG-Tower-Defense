@@ -4,6 +4,8 @@ import { compraMelhoria } from "./melhorias.js";
 
 import { iniciaProximaOnda } from "./ondas.js";
 
+import { alternaMudo, estaMudo } from "./audio.js";
+
 const hud = document.querySelector("#hud");
 
 const vidaHUD = document.querySelector("#vida");
@@ -12,6 +14,9 @@ const ondaAtualHUD = document.querySelector("#onda-atual");
 
 const pontosHUD = document.querySelector("#pontos");
 const moedasHUD = document.querySelector("#moedas");
+
+const botaoSom = document.querySelector("#btn-som");
+const iconeSom = document.querySelector("#icone-som");
 
 const menuHUD = document.querySelector("#menu");
 const botaoIniciar = document.querySelector("#btn-iniciar");
@@ -300,8 +305,33 @@ function atualizaVida(jogo) {
   vidaPreenchimentoHUD.classList.toggle("baixa", porcentagemVida <= 25);
 }
 
+function atualizaIconeSom() {
+  if (!iconeSom || !botaoSom) {
+    return;
+  }
+
+  if (estaMudo()) {
+    iconeSom.src =
+      "assets/sprites/hud/mudo.png";
+
+    botaoSom.setAttribute(
+      "aria-label",
+      "Ativar som"
+    );
+  } else {
+    iconeSom.src =
+      "assets/sprites/hud/volume.png";
+
+    botaoSom.setAttribute(
+      "aria-label",
+      "Desativar som"
+    );
+  }
+}
+
 export function atualizaHUD(jogo) {
   atualizaVida(jogo);
+  atualizaIconeSom();
 
   if (ondaAtualHUD) {
     ondaAtualHUD.textContent = `Onda ${jogo.onda} de ${ONDAS.length}`;
@@ -391,5 +421,14 @@ export function registraHUD(jogo, acoes) {
 
       iniciaProximaOnda(jogo);
     });
+  }
+
+  if (botaoSom) {
+    botaoSom.addEventListener("click", () => {
+      alternaMudo();
+      atualizaIconeSom();
+    });
+
+    atualizaIconeSom();
   }
 }

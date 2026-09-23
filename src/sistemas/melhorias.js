@@ -1,4 +1,7 @@
 import { PIC, FERRO, EFEITOS,MELHORIAS } from "../config/atributos.js";
+
+import { tocaSom } from "./audio.js";
+
 import { embaralha } from "./ondas.js";
 
 export function aplicaMelhorias(jogo) {
@@ -56,5 +59,6 @@ export function compraMelhoria(jogo, chave) {
   jogo.moedas -= config.preco;
   jogo.melhorias[chave] += 1;
 
+  tocaSom("compra");
   aplicaMelhorias(jogo);
 }

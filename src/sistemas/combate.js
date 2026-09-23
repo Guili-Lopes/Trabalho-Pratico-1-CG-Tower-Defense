@@ -2,6 +2,8 @@ import { criaProjetil } from "../entidades/projeteis.js";
 
 import { PULSO, EFEITOS } from "../config/atributos.js";
 
+import { tocaSom } from "./audio.js";
+
 import { criaEfeitoDescarga } from "./efeitos.js";
 
 // Aplica dano a um inimigo e verifica sua morte
@@ -27,6 +29,7 @@ export function aplicaDanoAoInimigo(jogo, indice, dano) {
 
   // Verifica se o inimigo morreu
   if (inimigo.vida <= 0) {
+    tocaSom("morte");
     // Verifica se o inimigo possui descarga ao morrer
     if (inimigo.descargaRaio) {
 
@@ -35,7 +38,10 @@ export function aplicaDanoAoInimigo(jogo, indice, dano) {
           inimigo.x,
           inimigo.y,
           inimigo.descargaRaio
-        ));
+        )
+      );
+
+      tocaSom("descarga")
 
       const dx = jogo.pic.x - inimigo.x;
       const dy = jogo.pic.y - inimigo.y;
@@ -61,7 +67,7 @@ function disparaDescargaDoPIC(jogo) {
   const raio = EFEITOS.capacitorDescargaRaio;
 
   const bonusDano = 1 + EFEITOS.capacitorDano * jogo.melhorias.capacitor;
-
+  tocaSom("descarga");
   const dano = EFEITOS.capacitorDescargaDano * bonusDano;
 
   // Cria o efeito visual da descarga
@@ -132,7 +138,7 @@ export function atualizaDisparo(jogo, dt) {
   const dy = alvo.y - jogo.pic.y;
 
   const comprimento = Math.sqrt(dx * dx + dy * dy);
-
+  tocaSom("tiro");
   const direcaoX = dx / comprimento;
   const direcaoY = dy / comprimento;
 

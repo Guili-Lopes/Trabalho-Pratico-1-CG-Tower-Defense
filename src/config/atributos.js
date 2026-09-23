@@ -44,7 +44,7 @@ export const INIMIGOS = {
         tamanho: 6,
         raio: 3,
         reducaoDano: 0,       // fração do dano bloqueada pelo escudo
-        moedas: 5,
+        moedas: 6,
         pontos: 10
     },
 
@@ -57,7 +57,7 @@ export const INIMIGOS = {
         tamanho: 7,
         raio: 3.5,
         reducaoDano: 0,
-        moedas: 10,
+        moedas: 12,
         pontos: 25,
         // Descarga liberada quando morre
         descargaRaio: 8,
@@ -73,7 +73,7 @@ export const INIMIGOS = {
         tamanho: 7,
         raio: 3.5,
         reducaoDano: 0.2,     // 20% de redução, vale pra tudo
-        moedas: 12,
+        moedas: 16,
         pontos: 30
     },
 
@@ -86,7 +86,7 @@ export const INIMIGOS = {
         tamanho: 5,
         raio: 2.5,
         reducaoDano: 0,
-        moedas: 4,
+        moedas: 6,
         pontos: 8,
         tamanhoGrupo: 3 // Quantidade de diodos em bando
     },
@@ -100,7 +100,7 @@ export const INIMIGOS = {
         tamanho: 12,
         raio: 6,
         reducaoDano: 0,
-        moedas: 100,
+        moedas: 1000,
         pontos: 300,
         // Mecânica de avalanche
         limiteAvalanche: 150,     // dano acumulado para disparar
@@ -222,42 +222,42 @@ export const MELHORIAS = {
   resistor: {
     nome: "Resistor",
     descricao: "Reduz o dano recebido pelo PIC em 5% por nível, chegando a 15%",
-    preco: 50,
+    preco: 40,
     nivelMaximo: 3
   },
 
   capacitor: {
     nome: "Capacitor",
     descricao: "Aumenta o dano do PIC em 5% por nível, chegando a 15%. A cada 10 disparos, libera uma descarga em área",
-    preco: 60,
+    preco: 45,
     nivelMaximo: 3
   },
 
   indutor: {
     nome: "Indutor",
     descricao: "Cria um campo ao redor do PIC. A cada nível, o campo aumenta e reduz a velocidade dos inimigos em mais 3%",
-    preco: 55,
+    preco: 45,
     nivelMaximo: 3
   },
 
   diodo: {
     nome: "Diodo",
     descricao: "Bloqueia periodicamente um ataque recebido pelo PIC. A recarga diminui para 20 s, 14 s e 8 s",
-    preco: 70,
+    preco: 50,
     nivelMaximo: 3
   },
 
   transistor: {
     nome: "Transistor",
     descricao: "Aumenta a cadência de disparo e a velocidade dos pulsos em 7% por nível, chegando a 21%",
-    preco: 65,
+    preco: 45,
     nivelMaximo: 3
   },
 
   ferro: {
     nome: "Ferro de solda",
     descricao: "Aumenta o dano causado pelos cliques em 5% por nível, chegando a 15%",
-    preco: 40,
+    preco: 35,
     nivelMaximo: 3
   }
 };
@@ -281,9 +281,9 @@ export const EFEITOS = {
 
   diodoIntervalos: [
     0,
-    20,
-    14,
-    8
+    18,
+    12,
+    7
   ],
 
   transistorBonus: 0.12,

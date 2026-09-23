@@ -17,6 +17,8 @@ import { MUNDO, PIC, FERRO, ONDAS } from "./config/atributos.js";
 
 import { atualizaEfeitos } from "./sistemas/efeitos.js";
 
+import { tocaSom, alternaMudo, iniciaMusica } from "./sistemas/audio.js";
+
 /* Teste da fila
 console.log("Onda 1:", montaFila(1));
 console.log("Onda 2:", montaFila(2));
@@ -310,7 +312,7 @@ function atualizaCena(dt) {
       const tipo = jogo.fila.shift();
 
       jogo.inimigos.push(
-        criaInimigo(tipo)
+        ...criaInimigo(tipo)
       );
     }
   }
@@ -334,6 +336,7 @@ function atualizaCena(dt) {
   if (!jogo.emIntervalo && jogo.fila.length === 0 && jogo.inimigos.length === 0) {
     // Última onda concluída
     if (jogo.onda >= ONDAS.length) {
+      tocaSom("vitoria");
       jogo.venceu = true;
     } else {
       jogo.emIntervalo = true;
@@ -344,6 +347,7 @@ function atualizaCena(dt) {
 
   // Verifica o fim do jogo
   if (jogo.pic.vida <= 0 && !jogo.acabou) {
+    tocaSom("derrota");
     jogo.pic.vida = 0;
     jogo.pic.tempoFlash = 0;
     jogo.acabou = true;
@@ -367,12 +371,17 @@ function atualizaCena(dt) {
 
       console.log("Jogo reiniciado.");
     }
+
+    if (event.code === "KeyM" && !event.repeat) {
+      alternaMudo();
+    }
   });
 
   // Loop principal
   let tempoAnterior = null;
 
   function loop(tempoAtual) {
+    iniciaMusica();
     if (tempoAnterior !== null) {
       const dt = Math.min((tempoAtual - tempoAnterior) / 1000, 0.1);
 

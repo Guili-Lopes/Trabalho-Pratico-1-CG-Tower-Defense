@@ -252,8 +252,45 @@ body {
 
 .hud-direita {
   display: flex;
+  align-items: center;
 
   gap: 12px;
+}
+
+.botao-som {
+  width: 42px;
+  height: 42px;
+
+  padding: 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: transparent;
+
+  border: none;
+
+  cursor: pointer;
+
+  pointer-events: auto;
+}
+
+.botao-som:hover {
+  transform: scale(1.08);
+}
+
+.botao-som:active {
+  transform: scale(0.95);
+}
+
+.botao-som img {
+  width: 32px;
+  height: 32px;
+
+  object-fit: contain;
+
+  image-rendering: pixelated;
 }
 
 .tela {

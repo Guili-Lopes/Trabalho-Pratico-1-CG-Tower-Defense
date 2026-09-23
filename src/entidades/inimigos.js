@@ -1,4 +1,5 @@
 import { MUNDO, INIMIGOS } from "../config/atributos.js";
+import { tocaSom } from "../sistemas/audio.js";
 
 export function criaInimigo(tipo) {
   const config = INIMIGOS[tipo];
@@ -34,20 +35,25 @@ export function criaInimigo(tipo) {
       break;
   }
 
-  return {
-    ...config,
-    tipo: tipo,
-    x: x,
-    y: y,
-    estado: "andando",
-    tempoAtaque: config.intervaloAtaque,
-    tempoFlash: 0,
-    // Atributos só do transistor
-    danoAcumulado: 0,
-    emAvalanche: false,
-    tempoAvalanche: 0,
-    textura: tipo
-  };
+  const quantidade = config.tamanhoGrupo || 1;
+  const grupo = [];
+  for (let i = 0; i < quantidade; i++) {
+    grupo.push({
+      ...config,
+      tipo: tipo,
+      x: x + (Math.random() - 0.5) * 12, // Pequeno deslocamento para evitar que o grupo fique em cima do outro
+      y: y + (Math.random() - 0.5) * 12,
+      estado: "andando",
+      tempoAtaque: config.intervaloAtaque,
+      tempoFlash: 0,
+      // Atributos só do transistor
+      danoAcumulado: 0,
+      emAvalanche: false,
+      tempoAvalanche: 0,
+      textura: tipo
+    });
+  }
+  return grupo;
 }
 
 export function atualizaInimigo(inimigo, jogo, dt) {
@@ -73,6 +79,7 @@ export function atualizaInimigo(inimigo, jogo, dt) {
     inimigo.tempoAtaque += dt;
 
     if (inimigo.tempoAtaque >= inimigo.intervaloAtaque) {
+      tocaSom("danoPic");
       inimigo.tempoAtaque = 0;
 
       const dano = inimigo.emAvalanche ? inimigo.danoAvalanche : inimigo.dano;
