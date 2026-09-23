@@ -354,6 +354,23 @@ function atualizaCena(dt) {
   }
 }
 
+function alternaTelaCheia() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen()
+      .catch((erro) => {
+        console.error("Erro ao entrar em tela cheia:", erro);
+      });
+
+    return;
+  }
+
+  document.exitFullscreen()
+    .catch((erro) => {
+      console.error(
+        "Erro ao sair da tela cheia:", erro);
+    });
+}
+
   // Eventos de teclado
   window.addEventListener("keydown", (event) => {
     if (event.code === "KeyP" && !event.repeat) {
@@ -374,6 +391,10 @@ function atualizaCena(dt) {
 
     if (event.code === "KeyM" && !event.repeat) {
       alternaMudo();
+    }
+
+    if (event.code === "KeyF" && !event.repeat) {
+      alternaTelaCheia();
     }
   });
 
