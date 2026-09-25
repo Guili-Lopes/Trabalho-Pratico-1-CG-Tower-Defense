@@ -345,7 +345,7 @@ function atualizaCena(dt) {
   }
 
   // Verifica se todos os inimigos da onda foram derrotados
-  if (!jogo.emIntervalo && jogo.fila.length === 0 && jogo.inimigos.length === 0) {
+  if (!jogo.acabou && !jogo.emIntervalo && jogo.fila.length === 0 && jogo.inimigos.length === 0) {
     // Última onda concluída
     if (jogo.onda >= ONDAS.length) {
       tocaSom("vitoria");
