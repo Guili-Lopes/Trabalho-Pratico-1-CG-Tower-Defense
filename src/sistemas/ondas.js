@@ -54,7 +54,6 @@ export function calculaIntervaloSpawn(quantidadeRestante, totalDaOnda) {
 }
 
 export function iniciaProximaOnda(jogo) {
-  tocaSom("onda");
   const proximaOnda = jogo.onda + 1;
   const novaFila = montaFila(proximaOnda);
 
@@ -62,7 +61,8 @@ export function iniciaProximaOnda(jogo) {
   if (novaFila.length === 0) {
     return;
   }
-
+  
+  tocaSom("onda");
   jogo.onda = proximaOnda;
   jogo.fila = novaFila;
   jogo.totalDaOnda = novaFila.length;

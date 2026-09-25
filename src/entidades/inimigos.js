@@ -79,14 +79,19 @@ export function atualizaInimigo(inimigo, jogo, dt) {
     inimigo.tempoAtaque += dt;
 
     if (inimigo.tempoAtaque >= inimigo.intervaloAtaque) {
-      tocaSom("danoPic");
       inimigo.tempoAtaque = 0;
+      if(jogo.melhorias.diodo > 0 && jogo.tempoDiodo >= jogo.intervaloDiodo){
+        jogo.tempoDiodo = 0;
+      }
+      else{
+        tocaSom("danoPic");
 
-      const dano = inimigo.emAvalanche ? inimigo.danoAvalanche : inimigo.dano;
+        const dano = inimigo.emAvalanche ? inimigo.danoAvalanche : inimigo.dano;
 
-      alvo.vida -= dano * (1 - alvo.reducaoDano);
+        alvo.vida -= dano * (1 - alvo.reducaoDano);
 
-      alvo.tempoFlash = 0.15;
+        alvo.tempoFlash = 0.15;
+      }
     }
 
     return;

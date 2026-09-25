@@ -47,8 +47,8 @@ export function aplicaDanoAoInimigo(jogo, indice, dano) {
       const dy = jogo.pic.y - inimigo.y;
 
       const distanciaQuadrada = dx * dx + dy * dy;
-      const raioQuadrado = inimigo.descargaRaio * inimigo.descargaRaio;
-
+      const alcanceDescarga = inimigo.descargaRaio + jogo.pic.raio;
+      const raioQuadrado = alcanceDescarga * alcanceDescarga;
       // Aplica a descarga no PIC se estiver dentro do raio
       if (distanciaQuadrada <= raioQuadrado) {
         jogo.pic.vida -= inimigo.descargaDano * (1 - jogo.pic.reducaoDano);
@@ -87,7 +87,8 @@ function disparaDescargaDoPIC(jogo) {
     const dy = inimigo.y - jogo.pic.y;
 
     const distanciaQuadrada = dx * dx + dy * dy;
-    const raioQuadrado = raio * raio;
+    const alcanceDescarga = raio + inimigo.raio;
+    const raioQuadrado = alcanceDescarga * alcanceDescarga;
 
     if (distanciaQuadrada <= raioQuadrado) {
       aplicaDanoAoInimigo(jogo, i, dano);

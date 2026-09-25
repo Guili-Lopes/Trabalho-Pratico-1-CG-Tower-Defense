@@ -49,9 +49,11 @@ export function registraEntrada(canvas, jogo) {
 
       const dx = inimigo.x - posicao.x;
       const dy = inimigo.y - posicao.y;
-      tocaSom("solda");
+      
       // Colisão ponto-círculo
       if (dx * dx + dy * dy <= inimigo.raio * inimigo.raio) {
+        tocaSom("solda");
+        
         aplicaDanoAoInimigo(jogo, i, jogo.ferroDano);
 
         jogo.tempoFerro = 0;

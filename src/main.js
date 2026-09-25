@@ -83,7 +83,7 @@ function criaEstadoInicial() {
   return estado;
 }
 
-function reiniciaJogo(jogo) {
+function reiniciaJogo(jogo, iniciar = false) {
   const novoEstado = criaEstadoInicial();
 
   Object.assign(jogo, novoEstado);
@@ -134,13 +134,13 @@ async function main() {
   }
 );
 
+  document.addEventListener("pointerdown", iniciaMusica, { once: true });
+  document.addEventListener("keydown", iniciaMusica, { once: true });
+
   /* Debug para mostrar a onda 
   console.log(jogo.fila);
   console.log(jogo.totalDaOnda);
   */
-
-  // Entrada do jogador
-  registraEntrada(canvas, jogo);
 
   // Shader
   const shaderSprite = await carregarShaderSprite(gl);
@@ -297,6 +297,10 @@ function atualizaCena(dt) {
     jogo.pic.tempoFlash -= dt;
   }
 
+  if(jogo.melhorias.diodo > 0 && jogo.tempoDiodo < jogo.intervaloDiodo) {
+    jogo.tempoDiodo += dt;
+  }
+
   // Controla o surgimento dos inimigos da onda
   if (!jogo.emIntervalo && jogo.fila.length > 0) {
     jogo.tempoSpawn += dt;
@@ -332,6 +336,14 @@ function atualizaCena(dt) {
 
   verificaColisoes(jogo);
 
+  // Verifica o fim do jogo
+  if (jogo.pic.vida <= 0 && !jogo.acabou) {
+    tocaSom("derrota");
+    jogo.pic.vida = 0;
+    jogo.pic.tempoFlash = 0;
+    jogo.acabou = true;
+  }
+
   // Verifica se todos os inimigos da onda foram derrotados
   if (!jogo.emIntervalo && jogo.fila.length === 0 && jogo.inimigos.length === 0) {
     // Última onda concluída
@@ -344,14 +356,6 @@ function atualizaCena(dt) {
       jogo.tempoSpawn = 0;
       jogo.cartoes = sorteiaCartoes(jogo);
     }
-  }
-
-  // Verifica o fim do jogo
-  if (jogo.pic.vida <= 0 && !jogo.acabou) {
-    tocaSom("derrota");
-    jogo.pic.vida = 0;
-    jogo.pic.tempoFlash = 0;
-    jogo.acabou = true;
   }
 }
 
@@ -403,7 +407,6 @@ function alternaTelaCheia() {
   let tempoAnterior = null;
 
   function loop(tempoAtual) {
-    iniciaMusica();
     if (tempoAnterior !== null) {
       const dt = Math.min((tempoAtual - tempoAnterior) / 1000, 0.1);
 
