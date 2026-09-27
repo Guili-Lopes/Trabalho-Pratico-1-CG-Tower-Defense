@@ -1,6 +1,6 @@
 import { carregarShaderSprite } from "./renderizacao/shader.js";
 import { criarQuadrado } from "./renderizacao/quadrado.js";
-import { carregarTexturas } from "./renderizacao/textura.js";
+import { carregarTexturas, carregarAnimacoes } from "./renderizacao/textura.js";
 import { ortho } from "./renderizacao/matrizes.js";
 
 import { criaInimigo, atualizaInimigo } from "./entidades/inimigos.js";
@@ -15,9 +15,9 @@ import { sorteiaCartoes } from "./sistemas/melhorias.js";
 import { criaEstadoInicial, reiniciaJogo } from "./sistemas/estado.js";
 
 import { MUNDO, PIC, FERRO, ONDAS } from "./config/atributos.js";
-import { TEXTURAS } from "./config/texturas.js";
+import { TEXTURAS, ANIMACOES } from "./config/texturas.js";
 
-import { atualizaEfeitos } from "./sistemas/efeitos.js";
+import { atualizaEfeitos, criarEfeitoAnimado } from "./sistemas/efeitos.js";
 
 import { tocaSom, alternaMudo, iniciaMusica } from "./sistemas/audio.js";
 
@@ -73,6 +73,12 @@ async function main() {
   // Texturas
   const texturas = await carregarTexturas(gl, TEXTURAS);
 
+  //Animacoes
+  const animacoes = {};
+  for (const nome in ANIMACOES) {
+    animacoes[nome] = await carregarAnimacoes(gl, ANIMACOES[nome]);
+  }
+
   // Projeção
   const projecao = ortho(MUNDO.esquerda, MUNDO.direita, MUNDO.baixo, MUNDO.cima, -1, 1);
 
@@ -92,7 +98,8 @@ async function main() {
     larguraMundo: MUNDO.direita - MUNDO.esquerda,
     alturaMundo: MUNDO.cima - MUNDO.baixo,
     tamanhoFerro: FERRO.tamanho,
-    texturas: texturas
+    texturas: texturas,
+    animacoes: animacoes
   };
 
   // Atualização da cena
@@ -143,6 +150,7 @@ async function main() {
       jogo.pic.vida = 0;
       jogo.pic.tempoFlash = 0;
       jogo.acabou = true;
+      jogo.efeitos.push(criarEfeitoAnimado("explosaoPic", jogo.pic.x, jogo.pic.y, 28));
     }
 
     // Verifica se todos os inimigos da onda foram derrotados
@@ -206,7 +214,12 @@ async function main() {
 
       if (jogo.iniciado && !jogo.pausado && !jogo.acabou && !jogo.venceu) {
         atualizaCena(dt);
+      } else if (jogo.acabou || jogo.venceu) {
+        atualizaEfeitos(jogo, dt);
+        jogo.tempoDesdeFim += dt;
       }
+
+      jogo.relogio += dt;
     }
 
     tempoAnterior = tempoAtual;

@@ -1,5 +1,7 @@
 import { translacao, escala, multiplica, rotacaoZ } from "../renderizacao/matrizes.js";
 
+import { ANIMACOES, EFEITOS_AMBIENTE } from "../config/texturas.js";
+
 // Desenha um sprite na cena
 export function desenharSprite(
   render,
@@ -99,6 +101,22 @@ export function desenhaCena(render, jogo) {
     render.alturaMundo
   );
 
+  if(!jogo.venceu) {
+    for (const item of EFEITOS_AMBIENTE) {
+      const quadros = render.animacoes[item.animacao];
+      const duracaoQuadro = ANIMACOES[item.animacao].duracaoQuadro;
+      const quadro = Math.floor((jogo.relogio + item.fase) / duracaoQuadro) % quadros.length;
+      desenharSprite(
+        render,
+        quadros[quadro],
+        item.x,
+        item.y,
+        item.tamanho,
+        item.tamanho
+      );
+    }
+  }
+
     // Campo do indutor
   if (jogo.campoRaio > 0) {
     desenharSprite(
@@ -164,6 +182,17 @@ export function desenhaCena(render, jogo) {
       desenharSprite(
         render,
         render.texturas.descarga,
+        efeito.x,
+        efeito.y,
+        efeito.tamanho,
+        efeito.tamanho
+      );
+    }
+
+    if (efeito.tipo === "animacao") {
+      desenharSprite(
+        render,
+        render.animacoes[efeito.animacao][efeito.quadro],
         efeito.x,
         efeito.y,
         efeito.tamanho,

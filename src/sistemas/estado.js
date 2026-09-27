@@ -54,7 +54,10 @@ export function criaEstadoInicial() {
 
     cartoes: [],
     disparosDesdeDescarga: 0,
-    tempoDiodo: 0
+    tempoDiodo: 0,
+
+    tempoDesdeFim: 0,
+    relogio: 0
   };
 
   // Os valores derivados (dano, cadência, campo...) vêm sempre dos níveis

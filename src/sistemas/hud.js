@@ -6,6 +6,8 @@ import { iniciaProximaOnda } from "./ondas.js";
 
 import { alternaMudo, estaMudo } from "./audio.js";
 
+const atraso_fim = 1.2;
+
 const hud = document.querySelector("#hud");
 
 const vidaHUD = document.querySelector("#vida");
@@ -137,7 +139,7 @@ function atualizaGameOver(jogo) {
     return;
   }
 
-  if (jogo.acabou) {
+  if (jogo.acabou && jogo.tempoDesdeFim >= atraso_fim) {
     gameoverHUD.classList.remove("oculto");
 
     if (pontosFinaisHUD) {
@@ -153,7 +155,7 @@ function atualizaVitoria(jogo) {
     return;
   }
 
-  if (jogo.venceu) {
+  if (jogo.venceu && jogo.tempoDesdeFim >= atraso_fim) {
     vitoriaHUD.classList.remove("oculto");
 
     if (pontosVitoriaHUD) {

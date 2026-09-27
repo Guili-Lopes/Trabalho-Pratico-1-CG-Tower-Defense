@@ -1,3 +1,5 @@
+import { ANIMACOES } from "../config/texturas.js";
+
 export function criaEfeitoDescarga(x, y, raioFinal) {
   return {
     tipo: "descarga",
@@ -6,6 +8,21 @@ export function criaEfeitoDescarga(x, y, raioFinal) {
     tamanho: 2,
     tamanhoFinal: raioFinal * 2,
     duracao: 0.50,
+    tempoVivo: 0
+  };
+}
+
+export function criarEfeitoAnimado(animacao, x, y, tamanho){
+  const config = ANIMACOES[animacao];
+  return {
+    tipo: "animacao",
+    animacao: animacao,
+    x: x,
+    y: y,
+    tamanho: tamanho,
+    quadros: config.quadros,
+    duracaoQuadro: config.duracaoQuadro,
+    duracao: config.duracaoQuadro * config.quadros,
     tempoVivo: 0
   };
 }
@@ -20,6 +37,10 @@ export function atualizaEfeitos(jogo, dt) {
       const progresso = efeito.tempoVivo / efeito.duracao;
 
       efeito.tamanho =  2 + (efeito.tamanhoFinal - 2) * progresso;
+    }
+
+    if (efeito.tipo === "animacao") {
+      efeito.quadro = Math.min(Math.floor(efeito.tempoVivo / efeito.duracaoQuadro), efeito.quadros - 1);
     }
 
     if (efeito.tempoVivo >= efeito.duracao) {

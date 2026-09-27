@@ -38,3 +38,13 @@ export async function carregarTexturas(gl, caminhos) {
   }
   return texturas;
 }
+// Carregar animações dos efeitos
+export async function carregarAnimacoes(gl, animacoes) {
+  const promessas = [];
+
+  for(let i = 1; i<= animacoes.quadros; i++) {
+    promessas.push(carregarTextura(gl, `${animacoes.pasta}/${animacoes.prefixo}${i}.png`));
+  }
+
+  return await Promise.all(promessas);
+}

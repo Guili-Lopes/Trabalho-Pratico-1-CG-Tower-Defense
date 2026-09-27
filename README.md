@@ -4,6 +4,7 @@ Jogo de defesa de torre 2D desenvolvido com JavaScript, WebGL2 e GLSL para a dis
 
 - **Jogo:** https://guili-lopes.github.io/Trabalho-Pratico-1-CG-Tower-Defense/
 - **Repositório:** https://github.com/Guili-Lopes/Trabalho-Pratico-1-CG-Tower-Defense
+- **Vídeo:** 
 
 ## O Jogo
 
@@ -156,9 +157,9 @@ A tela de pausa também permite reiniciar a partida ou voltar ao menu.
 
 Os itens abaixo foram escolhidos para o projeto. Aqueles marcados com `[x]` é aquilo que está funcionando na versão publicada.
 
-- [ ] **Texturas animadas:** você pode criar animações de personagens ou cenário. Por exemplo, para inimigo andando, atacando... uma explosão, para os projéteis etc.
+- [x] **Texturas animadas:** você pode criar animações de personagens ou cenário. Por exemplo, para inimigo andando, atacando... uma explosão, para os projéteis etc.
 
-- [ ] **Efeitos de partículas** para simular explosão, faíscas etc.
+- [x] **Efeitos de partículas** para simular explosão, faíscas etc.
 
 - [x] **Telas:** faça um jogo completo, ou seja, implemente telas de *splash screen*, menu inicial, créditos, opções, *game over*, etc.
 

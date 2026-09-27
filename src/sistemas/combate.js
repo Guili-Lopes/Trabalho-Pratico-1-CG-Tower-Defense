@@ -4,7 +4,7 @@ import { PULSO, EFEITOS } from "../config/atributos.js";
 
 import { tocaSom } from "./audio.js";
 
-import { criaEfeitoDescarga } from "./efeitos.js";
+import { criaEfeitoDescarga, criarEfeitoAnimado } from "./efeitos.js";
 
 // Aplica dano a um inimigo e verifica sua morte
 export function aplicaDanoAoInimigo(jogo, indice, dano) {
@@ -30,6 +30,14 @@ export function aplicaDanoAoInimigo(jogo, indice, dano) {
   // Verifica se o inimigo morreu
   if (inimigo.vida <= 0) {
     tocaSom("morte");
+    jogo.efeitos.push(
+      criarEfeitoAnimado(
+        "explosaoInimigo",
+        inimigo.x,
+        inimigo.y,
+        inimigo.tamanho * 2.2
+      )
+    );
     // Verifica se o inimigo possui descarga ao morrer
     if (inimigo.descargaRaio) {
 
